@@ -1336,7 +1336,6 @@ body:not(.light-mode) .agent-card{
           <button class="tab active" data-page="assignPage" onclick="showPage('assignPage')">ระบบมอบหมายงาน</button>
           <button class="tab" data-page="reportPage" onclick="showPage('reportPage')">หน้ารายงาน</button>
           <button class="tab" data-page="historyPage" onclick="showPage('historyPage')">ประวัติการส่งงาน</button>
-          <button class="tab" data-page="storePage" onclick="showPage('storePage')">STORE CRG</button>
           <button class="tab" data-page="adminPage" onclick="showPage('adminPage')">หน้าจัดการ Admin</button>
         </nav>
 
@@ -1508,30 +1507,6 @@ body:not(.light-mode) .agent-card{
           </section>
         </section>
 
-        <section id="storePage" class="page">
-          <div class="report-toolbar panel">
-            <div class="field">
-              <label for="storeSearch">ค้นหา STORE CRG</label>
-              <input id="storeSearch" placeholder="ค้นจาก storeid หรือ storename" oninput="loadStoreDebounced()">
-            </div>
-            <button class="primary-btn" onclick="loadStore()">ค้นหา</button>
-            <div id="storeTotal" class="history-total">พิมพ์คำค้นเพื่อดูข้อมูลร้าน</div>
-          </div>
-
-          <section class="report-card">
-            <div class="report-head">
-              <div>
-                <span class="tag">STORE CRG</span>
-                <h2>ข้อมูลร้าน</h2>
-                <div class="small-text">แสดงข้อมูลจากชีต store โดยค้นจาก storeid หรือ storename</div>
-              </div>
-            </div>
-            <div id="storeResults" class="store-results">
-              <div class="empty-state">พิมพ์ storeid หรือ storename แล้วกดค้นหา</div>
-            </div>
-          </section>
-        </section>
-
         <section id="adminPage" class="page">
           <div class="admin-grid">
             <section class="admin-card">
@@ -1604,7 +1579,6 @@ body:not(.light-mode) .agent-card{
       assignPage:["ระบบมอบหมายงาน","จัดคิวและติดตามสถานะทีม"],
       reportPage:["หน้ารายงาน","สรุปจำนวนงานรายชั่วโมงและรายเจ้าหน้าที่"],
       historyPage:["ประวัติการส่งงาน","ค้นหา Ticket หรือชื่อเจ้าหน้าที่ตามวันที่ส่งงาน"],
-      storePage:["STORE CRG","ค้นหาข้อมูลร้านจาก storeid หรือ storename"],
       adminPage:["หน้าจัดการ Admin","จัดการเจ้าหน้าที่และผู้ใช้งาน"]
     };
 
@@ -1613,7 +1587,6 @@ body:not(.light-mode) .agent-card{
     let adminAgentsCache = {};
     let reportDateReady = false;
     let historySearchTimer = null;
-    let storeSearchTimer = null;
 
     function escapeHtml(value){
       return String(value ?? "")
@@ -1736,7 +1709,6 @@ body:not(.light-mode) .agent-card{
 
       if(pageId === "reportPage") loadReport();
       if(pageId === "historyPage") loadHistory();
-      if(pageId === "storePage") loadStore();
       if(pageId === "adminPage") loadAdmin();
     }
 
@@ -2162,59 +2134,6 @@ body:not(.light-mode) .agent-card{
       if(!confirm("ยืนยันลบงานล่าสุดของ " + sys + " ?")) return;
       showLoading("กำลังลบงานล่าสุด...");
       google.script.run.withSuccessHandler(()=>{hideLoading();loadQueue(sys);loadNext(sys)}).deleteLastTicket(sys);
-    }
-
-    function loadStoreDebounced(){
-      clearTimeout(storeSearchTimer);
-      storeSearchTimer = setTimeout(loadStore, 250);
-    }
-
-    function loadStore(){
-      const searchText = document.getElementById("storeSearch")?.value.trim() || "";
-      const total = document.getElementById("storeTotal");
-      const results = document.getElementById("storeResults");
-      if(!results) return;
-
-      if(!searchText){
-        total.innerText = "พิมพ์คำค้นเพื่อดูข้อมูลร้าน";
-        results.innerHTML = `<div class="empty-state">พิมพ์ storeid หรือ storename แล้วกดค้นหา</div>`;
-        return;
-      }
-
-      total.innerText = "กำลังค้นหา...";
-      results.innerHTML = `<div class="empty-state">กำลังค้นหาข้อมูลร้าน...</div>`;
-
-      google.script.run
-        .withSuccessHandler(renderStore)
-        .withFailureHandler(err=>{
-          total.innerText = "ค้นหาไม่สำเร็จ";
-          results.innerHTML = `<div class="empty-state">${escapeHtml(err.message || err)}</div>`;
-        })
-        .getStoreData(searchText);
-    }
-
-    function renderStore(data){
-      const rows = data?.rows || [];
-      document.getElementById("storeTotal").innerText = `พบ ${data?.total || 0} รายการ`;
-      document.getElementById("storeResults").innerHTML = rows.length ? rows.map(row=>`
-        <div class="store-card">
-          <h3>${escapeHtml(row.storeid || "-")} | ${escapeHtml(row.storename || "-")}</h3>
-          <div class="store-grid">
-            <div class="store-field"><span>brand</span><strong>${escapeHtml(row.brand || "-")}</strong></div>
-            <div class="store-field"><span>abb</span><strong>${escapeHtml(row.abb || "-")}</strong></div>
-            <div class="store-field">
-              <span>ipaddress</span>
-              <strong>${escapeHtml(row.ipaddress || "-")}</strong>
-              ${row.ipaddress ? `<button class="icon-copy" title="Copy IP" onclick="copyText('${encodeURIComponent(row.ipaddress)}')">⧉</button>` : ""}
-            </div>
-            <div class="store-field"><span>province</span><strong>${escapeHtml(row.province || "-")}</strong></div>
-            <div class="store-field"><span>service</span><strong>${escapeHtml(row.service || "-")}</strong></div>
-            <div class="store-field"><span>Telephone</span><strong>${escapeHtml(row.telephone || "-")}</strong></div>
-            <div class="store-field"><span>email</span><strong>${escapeHtml(row.email || "-")}</strong></div>
-            <div class="store-field"><span>BKK/UPC</span><strong>${escapeHtml(row.area || "-")}</strong></div>
-          </div>
-        </div>
-      `).join("") : `<div class="empty-state">ไม่พบข้อมูลร้านตามคำค้นนี้</div>`;
     }
 
     function loadReport(){
