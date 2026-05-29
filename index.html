@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Assignment</title>
+  <style>
+:root{
+  --bg:#0f172a;
+  --bg2:#111827;
+
+  --panel:#172554;
+  --panel2:#1e3a5f;
+
+  --line:#334155;
+
+  --ink:#e2e8f0;
+  --muted:#94a3b8;
+
+  /* Azure Blue */
+  --brand:#0ea5e9;
+  --brand2:#2563eb;
+
+  --amber:#f59e0b;
+  --red:#ef4444;
+
+  --shadow:0 18px 50px rgba(0,0,0,.35);
+  --radius:12px;
+}
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Segoe UI",Tahoma,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%,rgba(139,92,246,.20),transparent 30%),
+        radial-gradient(circle at 88% 12%,rgba(79,140,255,.22),transparent 28%),
+        linear-gradient(135deg,var(--bg),var(--bg2) 58%,#0d1320);
+    }
+
+    button,input,select{font:inherit}
+    button{border:none;cursor:pointer}
+
+    input,select{
+      width:100%;
+      min-height:42px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#374151;
+      color:var(--ink);
+      outline:none;
+    }
+
+    input:focus,select:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 4px rgba(139,92,246,.14);
+    }
+
+    .login-page{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at 20% 10%,rgba(139,92,246,.22),transparent 30%),
+        radial-gradient(circle at 80% 20%,rgba(79,140,255,.25),transparent 28%),
+        linear-gradient(135deg,#0d1320,#172033);
+    }
+
+    .login-card{
+      width:min(920px,100%);
+      min-height:480px;
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      background:rgba(31,41,55,.86);
+      box-shadow:var(--shadow);
+    }
+
+    .login-visual{
+      position:relative;
+      min-height:320px;
+      padding:36px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      gap:12px;
+      background:
+        linear-gradient(135deg,rgba(13,19,32,.86),rgba(31,41,55,.28)),
+        url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80");
+      background-size:cover;
+      background-position:center;
+    }
+
+    .login-visual h1,.login-form h2{
+      margin:0;
+      letter-spacing:0;
+    }
+
+    .login-visual h1{font-size:32px}
+    .login-visual p,.login-form p{margin:0;color:var(--muted);line-height:1.6}
+
+    .login-form{
+      padding:42px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:16px;
+    }
+
+    .app{
+      min-height:100vh;
+      padding:18px 22px 28px;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      margin:-18px -22px 18px;
+      padding:16px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      background:rgba(15,23,42,.88);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(18px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:220px;
+    }
+
+    .brand-mark{
+      width:100px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      font-weight:900;
+      box-shadow:0 12px 24px rgba(139,92,246,.18);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:20px;
+    }
+
+    .brand p{
+      margin:2px 0 0;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .tabs{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      flex:1;
+    }
+
+    .tab{
+      min-height:40px;
+      padding:9px 14px;
+      border-radius:999px;
+      color:var(--muted);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.07);
+      font-weight:800;
+    }
+
+    .tab:hover,.tab.active{
+      color:#fff;
+      background:linear-gradient(135deg,rgba(139,92,246,.32),rgba(79,140,255,.28));
+      border-color:rgba(255,255,255,.16);
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .page{display:none}
+    .page.active{display:block}
+
+    .panel,.system-panel,.report-card,.admin-card{
+      background:linear-gradient(
+  180deg,
+  rgba(23,37,84,.92),
+  rgba(30,58,95,.92)
+);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .assignment-grid,.report-grid,.admin-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .system-panel{overflow:hidden}
+
+    .system-head,.admin-head,.report-head{
+      padding:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(79,140,255,.10));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .system-head h2,.admin-head h2,.report-head h2{
+      margin:0 0 6px;
+      font-size:19px;
+    }
+
+    .small-text{color:var(--muted);font-size:13px}
+
+    .tag{
+      display:inline-flex;
+      padding:5px 10px;
+      border-radius:999px;
+      background:rgba(139,92,246,.14);
+      color:#ddd6fe;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .ticket-row{
+      padding:16px 18px;
+      display:grid;
+      grid-template-columns:330px 1fr auto;
+      gap:10px;
+      align-items:center;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .next-inline{
+      grid-column:1/-1;
+      min-height:38px;
+      padding:9px 12px;
+      border-radius:var(--radius);
+      background:rgba(139,92,246,.09);
+      border:1px dashed rgba(139,92,246,.32);
+      color:#ddd6fe;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .section{
+      padding:14px 18px;
+      //border-top:1px solid rgba(255,255,255,.08);
+      border: none;
+    }
+
+    .section-title{
+      margin:0 0 10px;
+      display:flex;
+      align-items:center;
+      //justify-content:space-between;
+      color:#f8fafc;
+      font-size:16px;
+      font-weight:900;
+      border: none;
+    }
+
+    .count-pill{
+      min-width:28px;
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      color:#f8fafc;
+      text-align:center;
+      font-size:16px;
+    }
+
+    .queue-item,.agent-card,.data-row{
+      border:0.5px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      background:rgba(17,24,39,.58);
+      background:linear-gradient(145deg,#ffffff,#eef2f7);
+    }
+
+    .queue-item{
+      padding:6px 8px;
+      margin-top:8px;
+      color:var(--muted);
+      width:100%;
+      line-height:1.5;
+      font-size:15px;
+    }
+
+    .queue-item.latest{
+      //border-color:rgba(139,92,246,.55);
+      border:0.5px solid rgba(255,255,255,.08);
+      background:rgba(139,92,246,.09);
+      color:#ffcc00;
+    }
+
+    .queue-ticket{display:block;color:#fff;font-weight:500;font-size:14px}
+
+    .queue-badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:22px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(14,165,233,.18);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .icon-copy{
+      width:30px;
+      height:30px;
+      display:inline-grid;
+      place-items:center;
+      margin-left:6px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:var(--ink);
+      vertical-align:middle;
+      font-size:15px;
+    }
+
+    .icon-copy:hover{
+      background:rgba(14,165,233,.22);
+      color:#fff;
+    }
+
+    .store-results{
+      display:grid;
+      gap:10px;
+    }
+
+    .store-card{
+      padding:14px;
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:var(--radius);
+      background:rgba(17,24,39,.58);
+    }
+
+    .store-card h3{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+
+    .store-grid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:8px 12px;
+      font-size:14px;
+    }
+
+    .store-field span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+.agent-card{
+  padding:8px;
+  margin-top:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  border:0.2px solid rgba(255,255,255,.24);
+  box-shadow:var(--shadow-inset); 
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+.agent-card > div:first-child{
+  flex:1;
+  min-width:0;
+}
+    .agent-name{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 10px;              /* 👈 ระยะขอบด้านใน */
+      border-radius:999px;           /* 👈 ทำให้โค้งแบบ pill */
+      border:1px solid rgba(100,116,139,0.4);  /* 👈 เส้นกรอบ */
+      background:rgba(255,255,255,0.05);       /* 👈 พื้นหลังจาง ๆ */
+      font-weight:600;
+      font-size: 16px;
+    }
+
+    .status-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--muted);
+    }
+
+    .status-dot.online{background:var(--brand)}
+    .status-dot.break{background:var(--amber)}
+    .status-dot.offline{background:var(--red)}
+
+    .note{margin-top:6px;gap:20px;color:#cccc99;font-size:14px;line-height:1.5}
+    .agent-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    .switch{position:relative;width:44px;height:24px;display:inline-block}
+    .switch input{display:none}
+    .slider{position:absolute;inset:0;border-radius:999px;background:#3a4658;transition:.2s}
+    .slider:before{
+      content:"";
+      position:absolute;
+      width:18px;
+      height:18px;
+      left:3px;
+      top:3px;
+      border-radius:50%;
+      background:#fff;
+      transition:.2s;
+    }
+    input:checked + .slider{background:var(--brand)}
+    input:checked + .slider:before{transform:translateX(20px)}
+
+    .primary-btn,.send-btn,.btn-ok{
+      min-height:42px;
+      padding:10px 16px;
+      border-radius:var(--radius);
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      color:#fff;
+      width: 200px;
+      font-weight:900;
+      font-size:16px;
+      //box-shadow:0 10px 24px rgba(139,92,246,.20);
+      box-shadow: none;
+    }
+
+    .secondary-btn,.note-btn,.break-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.07);
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:800;
+      font-size:12px;
+    }
+
+    .break-btn.active{background:rgba(243,176,87,.16);color:#ffd79a;border-color:rgba(243,176,87,.38)}
+
+    .danger-btn,.btn-cancel{
+      min-height:25px;
+      padding:4px 6px;
+      border-radius:var(--radius);
+      background:rgba(248,113,113,.14);
+      color:#fecaca;
+      font-weight:500;
+      border:1px solid rgba(248,113,113,.28);
+    }
+
+    .report-card,.admin-card{padding:18px}
+    .chart{display:flex;align-items:end;gap:4px;height:190px;padding-top:16px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .bar-wrap{flex:1;min-width:18px;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:6px;height:100%}
+    .bar{width:100%;min-height:3px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--brand2),var(--brand))}
+    .bar-label{font-size:10px;color:var(--muted)}
+    .bar-count{font-size:11px;font-weight:900;color:#fff}
+
+    .summary-list{display:grid;gap:8px;margin-top:12px}
+    .summary-row,.data-row{
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--muted);
+    }
+    .summary-row strong,.data-row strong{color:#fff}
+
+    .history-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .history-row{
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns:minmax(150px,1.2fr) minmax(150px,1fr) minmax(130px,.9fr) minmax(90px,.6fr) minmax(150px,.9fr);
+      align-items:center;
+      gap:14px;
+      border-radius:var(--radius);
+      background:rgba(17,24,39,.58);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .history-header{
+      padding:8px 16px;
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .history-ticket{
+      display:block;
+      color:var(--ink);
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .history-time{
+      color:var(--ink);
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .history-total{
+      align-self:center;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .admin-section{margin-top:16px}
+    .admin-section:first-child{margin-top:0}
+    .admin-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    .overlay,.loading-overlay{
+      position:fixed;
+      inset:0;
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(0,0,0,.48);
+      backdrop-filter:blur(6px);
+    }
+
+    .popup,.loading-box{
+      width:min(420px,100%);
+      padding:24px;
+      border-radius:16px;
+      background:#1f2937;
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--ink);
+      box-shadow:var(--shadow);
+      text-align:center;
+    }
+
+    .popup-title{margin:0 0 10px;font-size:19px;font-weight:900}
+    .popup-detail{margin:0 0 16px;color:var(--muted);line-height:1.7}
+    .popup-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+    .spinner{
+      width:42px;
+      height:42px;
+      margin:0 auto 12px;
+      border:4px solid rgba(255,255,255,.12);
+      border-top-color:var(--brand);
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+    }
+
+    .empty-state{
+      padding:12px;
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:var(--radius);
+      color:var(--muted);
+      background:rgba(17,24,39,.45);
+      font-size:13px;
+    }
+
+    .login-error{min-height:20px;color:#fecaca;font-size:13px;font-weight:800}
+
+    .report-toolbar{
+      margin-bottom:16px;
+      padding:14px 16px;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+      min-width:210px;
+    }
+
+    .field label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .theme-btn{
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--ink);
+      font-weight:900;
+    }
+
+    .system-head,.admin-head,.report-head{
+      background:linear-gradient(135deg,rgba(37,99,235,.16),rgba(56,189,248,.11));
+    }
+
+    .tab:hover,.tab.active{
+      background:linear-gradient(135deg,rgba(37,99,235,.34),rgba(56,189,248,.28));
+    }
+
+    .tag{
+      background:rgba(37,99,235,.16);
+      color:#ddd6fe;
+    }
+
+.next-inline{
+  background:rgba(180,83,9,.22);
+  border:1px dashed rgba(251,146,60,.45);
+  color:#ffedd5;
+}
+
+.queue-item.latest{
+  border-color:rgba(251,146,60,.45);
+  border: none;
+  background:rgba(180,83,9,.22);
+  color:#fff7ed;
+}
+
+    .status-dot.online{background:var(--brand2)}
+
+    .primary-btn,.send-btn,.btn-ok{
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      //box-shadow:0 10px 24px rgba(139,92,246,.22);
+      box-shadow: none;
+    }
+
+body.light-mode{
+  --bg:#f1f5f9;
+  --bg2:#f8fafc;
+  --panel:#f8fafc;
+  --panel2:#eef2f7;
+  --line:#dbe3ec;
+  --ink:#1e293b;
+  --muted:#64748b;
+
+  --brand:#0284c7;
+  --brand2:#2563eb;
+
+  --shadow:0 18px 40px rgba(15,23,42,.10);
+
+  background:
+    radial-gradient(circle at 12% 0%,rgba(14,165,233,.10),transparent 30%),
+    radial-gradient(circle at 88% 12%,rgba(37,99,235,.10),transparent 28%),
+    linear-gradient(135deg,var(--bg),var(--bg2) 58%,#d7e3ef);
+}
+
+    body.light-mode input,
+    body.light-mode select{
+      background:#f8fafc;
+    }
+
+    body.light-mode .topbar{
+      background: rgba(248,250,252,0.7); /* เดิมมันขาวไป */
+    }
+
+    body.light-mode .login-card,
+    body.light-mode .panel,
+    body.light-mode .system-panel,
+    body.light-mode .report-card,
+    body.light-mode .admin-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(241,245,249,.96));
+    }
+
+    body.light-mode .tab,
+    body.light-mode .theme-btn,
+    body.light-mode .secondary-btn,
+    body.light-mode .note-btn,
+    body.light-mode .break-btn{
+      background:rgba(255,255,255,.72);
+      color:#64748b;
+      border-color:rgba(15,23,42,.10);
+    }
+
+    body.light-mode .tab:hover,
+    body.light-mode .tab.active{
+      color:#172033;
+      background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(56,189,248,.18));
+    }
+
+    body.light-mode .queue-item,
+    body.light-mode .agent-card,
+    body.light-mode .store-card,
+    body.light-mode .data-row,
+    body.light-mode .history-row,
+    body.light-mode .empty-state{
+      background:rgba(255,255,255,.72);
+      border-color:rgba(15,23,42,.10);
+    }
+
+    body.light-mode .queue-ticket,
+    body.light-mode .store-card strong,
+    body.light-mode .summary-row strong,
+    body.light-mode .data-row strong,
+    body.light-mode .history-ticket{
+      color:#172033;
+    }
+
+    body.light-mode .section-title{
+      color:#172033;
+    }
+  body.light-mode .queue-item.latest{
+  color:#111827;
+}
+body.light-mode .queue-item.latest{
+  background: #e0f2fe;     /* ฟ้าใส */
+  border-left: 4px solid #3b82f6; /* เส้นซ้ายแทน */
+  color: #0c4a6e;
+}
+body.light-mode .queue-item.latest .queue-ticket{
+  color:#000;
+}
+body.light-mode .next-inline{
+  color:#111827;
+}
+    /* 2026 soft neumorphism refresh */
+    :root{
+      --bg:#e7edf3;
+      --bg2:#f5f8fb;
+      --panel:#edf2f7;
+      --panel2:#f7fafc;
+      --line:rgba(116,132,151,.28);
+      --ink:#172033;
+      --muted:#66758a;
+      --brand:#2f80ed;
+      --brand2:#00a884;
+      --amber:#f59e0b;
+      --red:#e05252;
+      --shadow:14px 14px 34px rgba(130,145,163,.28),-14px -14px 34px rgba(255,255,255,.82);
+      --shadow-soft:8px 8px 20px rgba(130,145,163,.24),-8px -8px 20px rgba(255,255,255,.9);
+      --shadow-inset:inset 6px 6px 14px rgba(130,145,163,.20),inset -6px -6px 14px rgba(255,255,255,.88);
+      --radius:18px;
+    }
+
+    body,
+    body.light-mode{
+      background:linear-gradient(135deg,var(--bg),var(--bg2) 54%,#dde8f1);
+      color:var(--ink);
+    }
+
+    body.light-mode{
+      --bg:#e7edf3;
+      --bg2:#f5f8fb;
+      --panel:#edf2f7;
+      --panel2:#f7fafc;
+      --line:rgba(116,132,151,.28);
+      --ink:#172033;
+      --muted:#66758a;
+      --brand:#2f80ed;
+      --brand2:#00a884;
+      --shadow:14px 14px 34px rgba(130,145,163,.28),-14px -14px 34px rgba(255,255,255,.82);
+    }
+
+    body:not(.light-mode){
+      --bg:#121826;
+      --bg2:#1a2232;
+      --panel:#1a2232;
+      --panel2:#212b3d;
+      --line:rgba(255,255,255,.10);
+      --ink:#edf4fb;
+      --muted:#9baabc;
+      --brand:#68a7ff;
+      --brand2:#43d6a5;
+      --shadow:12px 12px 28px rgba(0,0,0,.36),-10px -10px 24px rgba(255,255,255,.035);
+      --shadow-soft:7px 7px 18px rgba(0,0,0,.32),-7px -7px 16px rgba(255,255,255,.035);
+      --shadow-inset:inset 6px 6px 14px rgba(0,0,0,.30),inset -6px -6px 14px rgba(255,255,255,.035);
+    }
+
+    input,select,
+    body.light-mode input,
+    body.light-mode select{
+      border:1px solid transparent;
+      background:var(--panel);
+      color:var(--ink);
+      box-shadow:var(--shadow-inset);
+    }
+
+    input:focus,select:focus{
+      border-color:rgba(47,128,237,.34);
+      box-shadow:var(--shadow-inset),0 0 0 4px rgba(47,128,237,.13);
+    }
+
+    .topbar,
+    body.light-mode .topbar{
+      background:rgba(237,242,247,.74);
+      border-bottom:1px solid rgba(255,255,255,.38);
+      box-shadow:0 10px 30px rgba(116,132,151,.14);
+    }
+
+    body:not(.light-mode) .topbar{background:rgba(18,24,38,.78)}
+
+    .login-card,
+    .panel,.system-panel,.report-card,.admin-card,
+    body.light-mode .login-card,
+    body.light-mode .panel,
+    body.light-mode .system-panel,
+    body.light-mode .report-card,
+    body.light-mode .admin-card{
+      background:linear-gradient(145deg,var(--panel2),var(--panel));
+      border:1px solid rgba(255,255,255,.34);
+      box-shadow:var(--shadow);
+      border-radius:22px;
+    }
+
+    .system-head,.admin-head,.report-head{
+      background:linear-gradient(145deg,rgba(255,255,255,.28),rgba(47,128,237,.08));
+      border-bottom-color:var(--line);
+    }
+
+    .brand-mark,
+    .primary-btn,.send-btn,.btn-ok{
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      //box-shadow:8px 8px 18px rgba(47,128,237,.22),-6px -6px 16px rgba(255,255,255,.20);
+      box-shadow: none;
+    }
+
+    .tab,
+    .theme-btn,
+    .secondary-btn,.note-btn,.break-btn,
+    body.light-mode .tab,
+    body.light-mode .theme-btn,
+    body.light-mode .secondary-btn,
+    body.light-mode .note-btn,
+    body.light-mode .break-btn{
+      background:var(--panel);
+      color:var(--muted);
+      //border:1px solid rgba(255,255,255,.28);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .tab:hover,.tab.active,
+    body.light-mode .tab:hover,
+    body.light-mode .tab.active{
+      color:var(--ink);
+      background:linear-gradient(145deg,var(--panel2),var(--panel));
+      box-shadow:var(--shadow-inset);
+    }
+
+    .queue-item,.agent-card,.data-row,.summary-row,.empty-state,
+    body.light-mode .queue-item,
+    body.light-mode .agent-card,
+    body.light-mode .data-row,
+    body.light-mode .history-row,
+    body.light-mode .empty-state{
+      background:linear-gradient(145deg,var(--panel2),var(--panel));
+      border-left: 4px solid #3b82f6; /* เส้นซ้ายแทน */
+      box-shadow:var(--shadow-soft);
+    }
+
+    .queue-item.latest{
+      background:linear-gradient(145deg,rgba(255,246,226,.90),rgba(237,242,247,.90));
+      border-left: 4px solid #3b82f6; /* เส้นซ้ายแทน */
+      box-shadow:var(--shadow-soft);
+      border:0.2px solid rgba(254,191,94,.90);
+    }
+
+    body:not(.light-mode) .queue-item.latest{
+      background:linear-gradient(145deg,rgba(72,51,25,.80),rgba(33,43,61,.90));
+    }
+
+    .next-inline{
+      background:linear-gradient(145deg,rgba(232,248,242,.90),rgba(237,242,247,.90));
+      //border:1px solid rgba(0,168,132,.28);
+      border: none;
+      color:#08735d;
+      box-shadow:var(--shadow-inset);
+    }
+
+body:not(.light-mode) .next-inline{
+  background: linear-gradient(145deg, #ffe4c4 , #fae7b5);
+  border: 0.5px #f59e0b;
+  color: #7c2d12;
+  font-size: 16px;
+  font-weight: 500;
+  max-width: 330px;   /* ปรับความสั้นได้ */
+  box-shadow:var(--shadow-inset);
+}
+#ticketKFC,
+#ticketNONKFC{
+  background: linear-gradient(145deg, #ffffff, #e5e7eb);
+  color: #111827;
+}
+    .agent-meta{
+      margin-top:8px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .end-time-field{
+      width:78px;
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:14px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .closing-chip{
+      display:inline-flex;
+      align-items:center;
+      min-height:26px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:rgba(245,158,11,.14);
+      color:#b45309;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    body:not(.light-mode) .closing-chip{color:#fcd38a}
+
+    .assignment-count{
+      display:inline-flex;
+      align-items:center;
+      margin-right:18px;
+      min-height:30px;
+      padding:5px 10px;
+      border-radius:999px;
+      background:rgba(47,128,237,.13);
+      color:var(--ink);
+      font-size:13px;
+      font-weight:1000;
+      white-space:nowrap;
+    }
+
+    .agent-mainline{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .time-controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .note-row{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:minmax(180px,1fr) auto;
+      align-items:center;
+      gap:28px;
+    }
+
+    .agent-control-row{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:auto minmax(260px,1fr);
+      align-items:center;
+      gap:28px;
+    }
+
+    .time-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border-radius:12px;
+      background:rgba(47,128,237,.12);
+      color:var(--ink);
+      border:1px solid rgba(47,128,237,.18);
+      font-weight:900;
+      font-size:12px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .summary-bar-row{
+      position:relative;
+      overflow:hidden;
+      min-height:44px;
+    }
+
+    .summary-bar-row::before{
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:var(--bar-width,0%);
+      border-radius:inherit;
+      background:linear-gradient(90deg,rgba(47,128,237,.24),rgba(0,168,132,.18));
+      pointer-events:none;
+    }
+
+    .summary-bar-row > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .system-title-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .system-logo{
+      width:60px;
+      height:60px;
+      padding:8px;
+      object-fit:contain;
+      border-radius:16px;
+      background:var(--panel);
+      box-shadow:var(--shadow-soft);
+      flex:0 0 auto;
+    }
+
+.section-title{
+  padding:6px 4px;
+  border:none;
+  box-shadow:none;
+  background:transparent;
+  font-size:18px;
+  font-weight:900;
+}
+
+    .section-title .count-pill{
+      font-size:14px;
+      min-width:34px;
+      padding:5px 10px;
+    }
+
+    .popup,.loading-box{
+      background:linear-gradient(145deg,var(--panel2),var(--panel));
+      border:1px solid rgba(255,255,255,.30);
+      box-shadow:var(--shadow);
+    }
+
+    .copy-toast{
+      position:fixed;
+      left:50%;
+      bottom:24px;
+      z-index:10050;
+      transform:translateX(-50%);
+      min-width:132px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(15,23,42,.92);
+      color:#fff;
+      text-align:center;
+      font-weight:900;
+      box-shadow:0 14px 34px rgba(0,0,0,.24);
+      animation:toastIn .18s ease-out;
+    }
+
+    @keyframes toastIn{
+      from{opacity:0;transform:translate(-50%,8px)}
+      to{opacity:1;transform:translate(-50%,0)}
+    }
+
+/* Light mode */
+body.light-mode .agent-card{
+  background: linear-gradient(145deg, #ffffff, #e6edf5);
+}
+
+body.light-mode{
+  --bg:#a7edf0;
+  --bg2:#dff7fb;
+  --panel:#f5f9ff;
+  --panel2:#ffffff;
+  --line:#d8e7f6;
+  --ink:#12335f;
+  --muted:#6b86aa;
+  --brand:#2f7ce5;
+  --brand2:#00a7b8;
+  --shadow:0 18px 38px rgba(29,78,137,.14);
+  --shadow-soft:0 10px 24px rgba(29,78,137,.10);
+  --shadow-inset:inset 0 0 0 1px rgba(216,231,246,.80);
+  background:
+    linear-gradient(135deg,rgba(124,223,226,.92),rgba(225,248,252,.84)),
+    #a7edf0;
+  color:var(--ink);
+}
+
+body.light-mode .app{
+  background:rgba(255,255,255,.26);
+}
+
+body.light-mode .topbar{
+  background:#073f87;
+  border-bottom:0;
+  box-shadow:0 18px 40px rgba(7,63,135,.24);
+}
+
+body.light-mode .brand h1,
+body.light-mode .brand p,
+body.light-mode .top-actions .small-text{
+  color:#fff;
+}
+
+body.light-mode .brand-mark{
+  background:#0b56ad;
+  color:#fff;
+  box-shadow:none;
+}
+
+body.light-mode .tab,
+body.light-mode .theme-btn,
+body.light-mode .secondary-btn,
+body.light-mode .note-btn,
+body.light-mode .break-btn{
+  background:rgba(255,255,255,.12);
+  color:#d7eaff;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:none;
+}
+
+body.light-mode .tab:hover,
+body.light-mode .tab.active{
+  background:#ffffff;
+  color:#0b56ad;
+  box-shadow:none;
+}
+
+body.light-mode .panel,
+body.light-mode .system-panel,
+body.light-mode .report-card,
+body.light-mode .admin-card,
+body.light-mode .popup,
+body.light-mode .loading-box{
+  background:#f5f9ff;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:18px;
+  box-shadow:0 18px 38px rgba(29,78,137,.14);
+}
+
+body.light-mode .system-head,
+body.light-mode .admin-head,
+body.light-mode .report-head{
+  background:#eef6ff;
+  border-bottom:1px solid #d8e7f6;
+}
+
+body.light-mode input,
+body.light-mode select{
+  background:#ffffff;
+  color:#12335f;
+  border:1px solid #dbeafe;
+  box-shadow:none;
+}
+
+body.light-mode input:focus,
+body.light-mode select:focus{
+  border-color:#7ab8ff;
+  box-shadow:0 0 0 4px rgba(47,124,229,.12);
+}
+
+body.light-mode .queue-item,
+body.light-mode .agent-card,
+body.light-mode .store-card,
+body.light-mode .data-row,
+body.light-mode .summary-row,
+body.light-mode .history-row,
+body.light-mode .empty-state{
+  background:#ffffff;
+  border:1px solid #e4eef9;
+  border-left:4px solid #2f7ce5;
+  box-shadow:0 10px 24px rgba(29,78,137,.08);
+}
+
+body.light-mode .queue-item.latest{
+  background:#edf6ff;
+  border:1px solid #cfe5ff;
+  border-left:4px solid #2f7ce5;
+  color:#12335f;
+}
+
+body.light-mode .queue-ticket,
+body.light-mode .agent-name,
+body.light-mode .store-card strong,
+body.light-mode .summary-row strong,
+body.light-mode .data-row strong,
+body.light-mode .history-ticket{
+  color:#12335f;
+}
+
+body.light-mode .tag,
+body.light-mode .queue-badge,
+body.light-mode .assignment-count{
+  background:#e7f2ff;
+  color:#1f6fd1;
+}
+
+body.light-mode .primary-btn,
+body.light-mode .send-btn,
+body.light-mode .btn-ok{
+  background:#2f7ce5;
+  color:#fff;
+  box-shadow:0 10px 22px rgba(47,124,229,.22);
+}
+
+body.light-mode .danger-btn{
+  background:#ef5f7f;
+  color:#fff;
+}
+
+body.light-mode .next-inline{
+  background:#e7f8fb;
+  border:1px solid #bdeff4;
+  color:#087e8b;
+  box-shadow:none;
+}
+
+body.light-mode .system-logo{
+  background:#ffffff;
+  box-shadow:0 8px 18px rgba(29,78,137,.10);
+}
+
+body.light-mode .icon-copy{
+  background:#e7f2ff;
+  border-color:#cfe5ff;
+  color:#1f6fd1;
+}
+
+body.light-mode .icon-copy:hover{
+  background:#2f7ce5;
+  color:#fff;
+}
+
+body.light-mode .copy-toast{
+  background:#0b56ad;
+}
+
+/* Dark mode */
+body:not(.light-mode) .agent-card{
+  background: linear-gradient(145deg, #1e293b, #111827);
+}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media (max-width:1000px){
+      .assignment-grid,.report-grid,.admin-grid{grid-template-columns:1fr}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .tabs{justify-content:flex-start;flex-wrap:wrap;width:100%}
+      .top-actions{width:100%;justify-content:space-between}
+    }
+
+    @media (max-width:720px){
+      .login-card{grid-template-columns:1fr}
+      .login-visual{min-height:210px}
+      .login-form{padding:28px}
+      .app{padding:14px}
+      .topbar{margin:-14px -14px 14px;padding:14px}
+      .ticket-row,.form-grid{grid-template-columns:1fr}
+      .store-grid{grid-template-columns:1fr}
+      .history-row{grid-template-columns:1fr}
+      .history-header{display:none}
+      .agent-card{align-items:flex-start;flex-direction:column}
+      .agent-actions{justify-content:flex-start}
+    }
+/* OFFLINE (แดงนุ่ม) */
+.slider{
+  background: #f87171;
+}
+
+/* ONLINE (เขียวนุ่ม) */
+.switch input:checked + .slider{
+  background: #4ade80;
+}
+  </style>
+</head>
+
+<body>
+  <div id="loginPage" class="login-page">
+    <div class="login-card">
+      <div class="login-visual">
+        <h1>ระบบมอบหมายงาน</h1>
+        <p>จัดคิวงาน ติดตามรายงาน และดูแลผู้ใช้งานในหน้าจอเดียว</p>
+      </div>
+
+      <div class="login-form">
+        <div>
+          <h2>เข้าสู่ระบบ</h2>
+          <p>กรอกบัญชีผู้ใช้งานเพื่อเริ่มทำงาน</p>
+        </div>
+        <input id="user" autocomplete="username" placeholder="Username">
+        <input id="pass" type="password" autocomplete="current-password" placeholder="Password">
+        <button class="primary-btn" onclick="login()">เข้าสู่ระบบ</button>
+        <div id="loginError" class="login-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="appPage" style="display:none;">
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">ALLSYS</div>
+          <div>
+            <h1 id="pageHeading">ระบบมอบหมายงาน</h1>
+            <p id="pageSubheading">จัดคิวและติดตามสถานะทีม</p>
+          </div>
+        </div>
+
+        <nav class="tabs" aria-label="เมนูหลัก">
+          <button class="tab active" data-page="assignPage" onclick="showPage('assignPage')">ระบบมอบหมายงาน</button>
+          <button class="tab" data-page="reportPage" onclick="showPage('reportPage')">หน้ารายงาน</button>
+          <button class="tab" data-page="historyPage" onclick="showPage('historyPage')">ประวัติการส่งงาน</button>
+          <button class="tab" data-page="storePage" onclick="showPage('storePage')">STORE CRG</button>
+          <button class="tab" data-page="adminPage" onclick="showPage('adminPage')">หน้าจัดการ Admin</button>
+        </nav>
+
+        <div class="top-actions">
+          <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+          <span id="currentUserLabel" class="small-text"></span>
+          <button class="danger-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+      </header>
+
+      <main>
+        <section id="assignPage" class="page active">
+          <div class="assignment-grid">
+            <section class="system-panel">
+              <div class="system-head">
+                <div class="system-title-row">
+                  <img class="system-logo" src="https://images.ctfassets.net/n4pc9wlortyn/1KlbdNMY4NXih97kFrgVPr/f7edc2411af37ca9ce5fc5b8d3e1abc8/Footer_KFC_Logo__3_.svg" alt="KFC logo">
+                  <div>
+                    <span class="tag">KFC</span>
+                    <h2>มอบหมายงาน KFC</h2>
+                    <div class="small-text">ส่งงานตามคิวหรือเลือกเจ้าหน้าที่เอง</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ticket-row">
+                <input id="ticketKFC" placeholder="Ticket KFC">
+                <select id="agentKFC"><option value="">Auto</option></select>
+                <button class="send-btn" onclick="send('KFC')">ส่งงาน</button>
+                <div id="nextKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
+              </div>
+
+              <div class="section">
+                <div class="section-title">📢 งานล่าสุด</div>
+                <div id="queueKFC"></div>
+                <button class="danger-btn" style="margin-top:10px" onclick="deleteLast('KFC')">❌ ยกเลิกงานล่าสุด KFC</button>
+              </div>
+
+              <div class="section">
+                <div class="section-title">🟩 ONLINE 🟩<span id="onlineCountKFC" class="count-pill">0</span></div>
+                <div id="onlineKFC"></div>
+              </div>
+              <div class="section">
+                <div class="section-title">🟨 BREAK 🟨<span id="breakCountKFC" class="count-pill">0</span></div>
+                <div id="breakKFC"></div>
+              </div>
+              <div class="section">
+                <div class="section-title">🟥 OFFLINE 🟥<span id="offlineCountKFC" class="count-pill">0</span></div>
+                <div id="offlineKFC"></div>
+              </div>
+            </section>
+
+            <section class="system-panel">
+              <div class="system-head">
+                <div class="system-title-row">
+                  <img class="system-logo" src="https://career.crg.co.th/images/logo.png" alt="CRG logo">
+                  <div>
+                    <span class="tag">NONKFC</span>
+                    <h2>มอบหมายงาน NONKFC</h2>
+                    <div class="small-text">ส่งงานตามคิวหรือเลือกเจ้าหน้าที่เอง</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ticket-row">
+                <input id="ticketNONKFC" placeholder="Ticket NONKFC">
+                <select id="agentNONKFC"><option value="">Auto</option></select>
+                <button class="send-btn" onclick="send('NONKFC')">ส่งงาน</button>
+                <div id="nextNONKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
+              </div>
+
+              <div class="section">
+                <div class="section-title">🌟งานล่าสุด</div>
+                <div id="queueNONKFC"></div>
+                <button class="danger-btn" style="margin-top:10px" onclick="deleteLast('NONKFC')">❌ ยกเลิกงานล่าสุด NONKFC</button>
+              </div>
+
+              <div class="section">
+                <div class="section-title">🟩 ONLINE 🟩<span id="onlineCountNONKFC" class="count-pill">0</span></div>
+                <div id="onlineNONKFC"></div>
+              </div>
+              <div class="section">
+                <div class="section-title">🟨 BREAK 🟨<span id="breakCountNONKFC" class="count-pill">0</span></div>
+                <div id="breakNONKFC"></div>
+              </div>
+              <div class="section">
+                <div class="section-title">🟥 OFFLINE 🟥<span id="offlineCountNONKFC" class="count-pill">0</span></div>
+                <div id="offlineNONKFC"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="reportPage" class="page">
+          <div class="report-toolbar panel">
+            <div class="field">
+              <label for="reportDate">&#128197; Report date</label>
+              <input id="reportDate" type="date" onchange="loadReport()">
+            </div>
+            <button class="primary-btn" onclick="loadReport()">&#128202; Refresh report</button>
+          </div>
+
+          <div class="report-grid">
+            <section class="report-card">
+              <div class="report-head">
+                <div>
+                  <span class="tag">&#127831; KFC</span>
+                  <h2>Hourly assignment chart</h2>
+                  <div id="reportTotalKFC" class="small-text">Total 0 jobs</div>
+                </div>
+              </div>
+              <div id="hourlyKFC" class="chart"></div>
+              <div class="admin-section">
+                <div class="section-title">&#128100; Agent summary</div>
+                <div id="agentSummaryKFC" class="summary-list"></div>
+              </div>
+              <div class="admin-section">
+                <div class="section-title">User sent summary</div>
+                <div id="userSummaryKFC" class="summary-list"></div>
+              </div>
+            </section>
+
+            <section class="report-card">
+              <div class="report-head">
+                <div>
+                  <span class="tag">&#127849; NONKFC</span>
+                  <h2>Hourly assignment chart</h2>
+                  <div id="reportTotalNONKFC" class="small-text">Total 0 jobs</div>
+                </div>
+              </div>
+              <div id="hourlyNONKFC" class="chart"></div>
+              <div class="admin-section">
+                <div class="section-title">&#128100; Agent summary</div>
+                <div id="agentSummaryNONKFC" class="summary-list"></div>
+              </div>
+              <div class="admin-section">
+                <div class="section-title">User sent summary</div>
+                <div id="userSummaryNONKFC" class="summary-list"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="historyPage" class="page">
+          <div class="report-toolbar panel">
+            <div class="field">
+              <label for="historyDate">&#128197; วันที่ส่งงาน</label>
+              <input id="historyDate" type="date" onchange="loadHistory()">
+            </div>
+            <div class="field">
+              <label for="historySearch">ค้นหาจาก Ticket หรือชื่อเจ้าหน้าที่</label>
+              <input id="historySearch" placeholder="เช่น INC12345 หรือชื่อเจ้าหน้าที่" oninput="loadHistoryDebounced()">
+            </div>
+            <button class="primary-btn" onclick="loadHistory()">ค้นหา</button>
+            <div id="historyTotal" class="history-total">พบ 0 รายการ</div>
+          </div>
+
+          <section class="report-card">
+            <div class="report-head">
+              <div>
+                <span class="tag">History</span>
+                <h2>ประวัติการส่งงาน</h2>
+                <div class="small-text">รายการของวันที่เลือก เรียงจากรายการล่าสุดลงมา</div>
+              </div>
+            </div>
+            <div id="historyList" class="history-list">
+              <div class="empty-state">กำลังโหลดประวัติการส่งงาน...</div>
+            </div>
+          </section>
+        </section>
+
+        <section id="storePage" class="page">
+          <div class="report-toolbar panel">
+            <div class="field">
+              <label for="storeSearch">ค้นหา STORE CRG</label>
+              <input id="storeSearch" placeholder="ค้นจาก storeid หรือ storename" oninput="loadStoreDebounced()">
+            </div>
+            <button class="primary-btn" onclick="loadStore()">ค้นหา</button>
+            <div id="storeTotal" class="history-total">พิมพ์คำค้นเพื่อดูข้อมูลร้าน</div>
+          </div>
+
+          <section class="report-card">
+            <div class="report-head">
+              <div>
+                <span class="tag">STORE CRG</span>
+                <h2>ข้อมูลร้าน</h2>
+                <div class="small-text">แสดงข้อมูลจากชีต store โดยค้นจาก storeid หรือ storename</div>
+              </div>
+            </div>
+            <div id="storeResults" class="store-results">
+              <div class="empty-state">พิมพ์ storeid หรือ storename แล้วกดค้นหา</div>
+            </div>
+          </section>
+        </section>
+
+        <section id="adminPage" class="page">
+          <div class="admin-grid">
+            <section class="admin-card">
+              <div class="admin-head">
+                <div>
+                  <span class="tag">Agents</span>
+                  <h2>จัดการเจ้าหน้าที่</h2>
+                  <div class="small-text">เพิ่ม แก้ไข หรือลบเจ้าหน้าที่ของ KFC และ NONKFC</div>
+                </div>
+              </div>
+
+              <div class="admin-section">
+                <div class="form-grid">
+                  <select id="adminAgentSystem">
+                    <option value="KFC">KFC</option>
+                    <option value="NONKFC">NONKFC</option>
+                  </select>
+                  <input id="adminAgentId" placeholder="ID (ปล่อยว่างเมื่อเพิ่มใหม่)">
+                  <input id="adminAgentName" placeholder="ชื่อเจ้าหน้าที่">
+                  <select id="adminAgentStatus">
+                    <option value="OFFLINE">OFFLINE</option>
+                    <option value="ONLINE">ONLINE</option>
+                    <option value="BREAK">BREAK</option>
+                  </select>
+                  <div class="agent-meta">
+                    <input id="adminAgentEndTimeHour" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" onchange="syncAdminEndTimeInputs()">
+                    <input id="adminAgentEndTimeMinute" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" onchange="syncAdminEndTimeInputs()">
+                  </div>
+                  <input id="adminAgentNote" placeholder="Note">
+                  <button class="primary-btn" onclick="saveAdminAgent()">บันทึกเจ้าหน้าที่</button>
+                </div>
+                <div id="adminAgents"></div>
+              </div>
+            </section>
+
+            <section class="admin-card">
+              <div class="admin-head">
+                <div>
+                  <span class="tag">Users</span>
+                  <h2>จัดการผู้ใช้งาน</h2>
+                  <div class="small-text">Users sheet ต้องมีคอลัมน์ Username, Password, Group</div>
+                </div>
+              </div>
+
+              <div class="admin-section">
+                <div class="form-grid">
+                  <input id="adminUsername" placeholder="Username">
+                  <input id="adminPassword" placeholder="Password">
+                  <select id="adminGroup">
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+                  </select>
+                  <button class="primary-btn" onclick="saveAdminUser()">บันทึก User</button>
+                </div>
+                <div id="adminUsers"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/app-config.js"></script>
+  <script src="./assets/supabase-api.js"></script>
+  <script>
+    const SYSTEMS = ["KFC","NONKFC"];
+    const PAGE_TEXT = {
+      assignPage:["ระบบมอบหมายงาน","จัดคิวและติดตามสถานะทีม"],
+      reportPage:["หน้ารายงาน","สรุปจำนวนงานรายชั่วโมงและรายเจ้าหน้าที่"],
+      historyPage:["ประวัติการส่งงาน","ค้นหา Ticket หรือชื่อเจ้าหน้าที่ตามวันที่ส่งงาน"],
+      storePage:["STORE CRG","ค้นหาข้อมูลร้านจาก storeid หรือ storename"],
+      adminPage:["หน้าจัดการ Admin","จัดการเจ้าหน้าที่และผู้ใช้งาน"]
+    };
+
+    let tempData = null;
+    let tempSys = null;
+    let adminAgentsCache = {};
+    let reportDateReady = false;
+    let historySearchTimer = null;
+    let storeSearchTimer = null;
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+    }
+
+    function currentUser(){
+      return localStorage.getItem("user") || "unknown";
+    }
+
+    function currentGroup(){
+      return localStorage.getItem("group") || "user";
+    }
+
+    function todayKey(){
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return `${year}-${month}-${day}`;
+    }
+
+    const HOUR_OPTIONS = Array.from({length:25},(_,hour)=>String(hour).padStart(2,"0"));
+    const MINUTE_OPTIONS = Array.from({length:60},(_,minute)=>String(minute).padStart(2,"0"));
+
+    function splitEndTime(value=""){
+      const match = String(value || "").match(/^(\d{1,2}):(\d{2})$/);
+      if(!match) return {hour:"",minute:"00"};
+      return {
+        hour: String(Number(match[1])).padStart(2,"0"),
+        minute: match[2]
+      };
+    }
+
+    function normalizeHour(hour){
+      if(String(hour || "").trim() === "") return "";
+      const value = Number(String(hour).trim());
+      if(Number.isNaN(value)) return "";
+      return String(Math.min(24, Math.max(0, value))).padStart(2,"0");
+    }
+
+    function normalizeMinute(minute,hour=""){
+      if(normalizeHour(hour) === "24") return "00";
+      const value = Number(String(minute || "0").trim());
+      if(Number.isNaN(value)) return "00";
+      return String(Math.min(59, Math.max(0, value))).padStart(2,"0");
+    }
+
+    function composeEndTime(hour,minute){
+      const cleanHour = normalizeHour(hour);
+      if(!cleanHour) return "";
+      const cleanMinute = normalizeMinute(minute,cleanHour);
+      return `${cleanHour}:${cleanMinute}`;
+    }
+
+    function renderTimeDatalists(){
+      return `
+        <datalist id="hourOptions">${HOUR_OPTIONS.map(hour=>`<option value="${hour}"></option>`).join("")}</datalist>
+        <datalist id="minuteOptions">${MINUTE_OPTIONS.map(minute=>`<option value="${minute}"></option>`).join("")}</datalist>
+      `;
+    }
+
+    function refreshTimeInputs(prefix,value=""){
+      const hourInput = document.getElementById(prefix + "Hour");
+      const minuteInput = document.getElementById(prefix + "Minute");
+      if(!hourInput || !minuteInput) return;
+      const time = splitEndTime(value);
+      hourInput.value = time.hour;
+      minuteInput.value = time.hour === "24" ? "00" : time.minute;
+      minuteInput.disabled = time.hour === "24";
+    }
+
+    function initTimeSelectors(){
+      if(!document.getElementById("hourOptions")){
+        document.body.insertAdjacentHTML("beforeend", renderTimeDatalists());
+      }
+      refreshTimeInputs("adminAgentEndTime");
+    }
+
+    function initReportDate(){
+      const input = document.getElementById("reportDate");
+      if(!input) return;
+      input.value = input.value || todayKey();
+      reportDateReady = true;
+    }
+
+    function initHistoryDate(){
+      const input = document.getElementById("historyDate");
+      if(!input) return;
+      input.value = input.value || todayKey();
+    }
+
+    function applyTheme(theme){
+      const mode = theme || localStorage.getItem("theme") || "dark";
+      document.body.classList.toggle("light-mode", mode === "light");
+      const btn = document.getElementById("themeToggle");
+      if(btn) btn.innerText = mode === "light" ? "☀️ Light" : "🌙 Dark";
+      localStorage.setItem("theme", mode);
+    }
+
+    function toggleTheme(){
+      applyTheme(document.body.classList.contains("light-mode") ? "dark" : "light");
+    }
+
+    function showPage(pageId){
+      if(pageId === "adminPage" && currentGroup() !== "admin"){
+        alert("เฉพาะ Group admin เท่านั้นที่เข้าใช้งานหน้านี้ได้");
+        return;
+      }
+
+      document.querySelectorAll(".page").forEach(page=>page.classList.toggle("active", page.id === pageId));
+      document.querySelectorAll(".tab").forEach(item=>item.classList.toggle("active", item.dataset.page === pageId));
+
+      document.getElementById("pageHeading").innerText = PAGE_TEXT[pageId]?.[0] || "";
+      document.getElementById("pageSubheading").innerText = PAGE_TEXT[pageId]?.[1] || "";
+
+      if(pageId === "reportPage") loadReport();
+      if(pageId === "historyPage") loadHistory();
+      if(pageId === "storePage") loadStore();
+      if(pageId === "adminPage") loadAdmin();
+    }
+
+    function login(){
+      const u = document.getElementById("user").value.trim();
+      const p = document.getElementById("pass").value;
+
+      if(!u || !p){
+        document.getElementById("loginError").innerText = "กรุณากรอก Username และ Password";
+        return;
+      }
+
+      google.script.run.withSuccessHandler(res=>{
+        if(res?.success === true){
+          localStorage.setItem("user", res.user || u);
+          localStorage.setItem("group", res.group || "user");
+          localStorage.setItem("login", "true");
+          localStorage.setItem("lastActive", Date.now());
+          enterApp();
+        }else{
+          document.getElementById("loginError").innerText = "Username หรือ Password ไม่ถูกต้อง";
+        }
+      }).checkLogin(u,p);
+    }
+
+    function logout(){
+      localStorage.removeItem("login");
+      localStorage.removeItem("lastActive");
+      localStorage.removeItem("user");
+      localStorage.removeItem("group");
+      document.getElementById("loginPage").style.display = "flex";
+      document.getElementById("appPage").style.display = "none";
+    }
+
+    function enterApp(){
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("appPage").style.display = "block";
+      applyTheme();
+      initReportDate();
+      document.getElementById("currentUserLabel").innerText = `${currentUser()} (${currentGroup()})`;
+      document.querySelector('[data-page="adminPage"]').style.display = currentGroup() === "admin" ? "" : "none";
+      showPage("assignPage");
+      loadAll();
+    }
+
+    function resetIdle(){
+      localStorage.setItem("lastActive", Date.now());
+    }
+
+    document.addEventListener("mousemove", resetIdle);
+    document.addEventListener("keydown", resetIdle);
+    document.addEventListener("click", resetIdle);
+
+    setInterval(()=>{
+      const last = Number(localStorage.getItem("lastActive") || Date.now());
+      if(Date.now() - last > 24 * 60 * 60 * 1000) logout();
+    },60000);
+
+    function send(sys){
+      const ticket = document.getElementById("ticket"+sys).value.trim();
+      const agent = document.getElementById("agent"+sys).value;
+
+      if(!ticket){
+        alert("กรุณาใส่ Ticket");
+        return;
+      }
+
+      tempData = {ticket,agent};
+      tempSys = sys;
+
+      let name = "🤖Auto ตามลำดับคิว";
+      if(agent){
+        const sel = document.getElementById("agent"+sys);
+        name = sel.options[sel.selectedIndex]?.text || "";
+      }
+
+      document.body.insertAdjacentHTML("beforeend",`
+        <div class="overlay" id="popup">
+          <div class="popup">
+            <div class="popup-title">ยืนยันการส่งงาน</div>
+            <p class="popup-detail">
+              Ticket: <strong>${escapeHtml(ticket)}</strong><br>
+              ผู้รับงาน: <strong>${escapeHtml(name)}</strong>
+            </p>
+            <div class="popup-actions">
+              <button class="btn-ok" onclick="confirmSend()">ยืนยัน</button>
+              <button class="btn-cancel" onclick="closePopup()">ยกเลิก</button>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    function confirmSend(){
+      if(!tempData) return;
+
+      document.getElementById("popup")?.remove();
+      showLoading("กำลังบันทึกงาน...");
+
+      google.script.run.withSuccessHandler(res=>{
+        hideLoading();
+
+        if(res?.ok === false){
+          alert(res.message || "ไม่สามารถบันทึกงานได้");
+          return;
+        }
+
+        document.getElementById("ticket"+tempSys).value = "";
+        const finalName = res?.name || tempData.agent || "Auto System";
+        const copyName = res?.copyName || finalName;
+
+        document.body.insertAdjacentHTML("beforeend",`
+          <div class="overlay" id="successPopup">
+            <div class="popup">
+              <div class="popup-title" style="color:#ddd6fe">บันทึกสำเร็จ</div>
+              <p class="popup-detail">
+                Incident: <strong>${escapeHtml(tempData.ticket)}</strong><br>
+                Assign to: <strong>${escapeHtml(copyName)}</strong>
+                <button class="icon-copy" title="Copy ชื่อ" onclick="copyText('${encodeURIComponent(copyName)}')">⧉</button>
+              </p>
+              <button class="btn-ok" onclick="closeSuccess()">ตกลง</button>
+            </div>
+          </div>
+        `);
+
+        tempData = null;
+        tempSys = null;
+        loadAll();
+      }).assignTicket(tempData.ticket,tempSys,tempData.agent,currentUser());
+    }
+
+    function copyText(encodedText){
+      const text = decodeURIComponent(encodedText || "");
+      if(!text) return;
+      if(navigator.clipboard?.writeText){
+        navigator.clipboard.writeText(text)
+          .then(()=>showCopyToast())
+          .catch(()=>{
+            copyByTextarea(text);
+            showCopyToast();
+          });
+      }else{
+        copyByTextarea(text);
+        showCopyToast();
+      }
+    }
+
+    function copyByTextarea(text){
+      const input = document.createElement("textarea");
+      input.value = text;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      input.remove();
+    }
+
+    function showCopyToast(){
+      document.getElementById("copyToast")?.remove();
+      document.body.insertAdjacentHTML("beforeend",`<div class="copy-toast" id="copyToast">Copy แล้ว</div>`);
+      setTimeout(()=>document.getElementById("copyToast")?.remove(),1600);
+    }
+
+    function closeSuccess(){document.getElementById("successPopup")?.remove()}
+    function closePopup(){document.getElementById("popup")?.remove();tempData=null;tempSys=null}
+
+    function loadAll(){
+      SYSTEMS.forEach(sys=>{
+        loadAgents(sys);
+        loadQueue(sys);
+        loadNext(sys);
+      });
+    }
+
+    function isEditingEndTime(){
+      const active = document.activeElement;
+      return Boolean(active?.classList?.contains("end-time-field"));
+    }
+
+    function autoRefresh(){
+      SYSTEMS.forEach(sys=>{
+        if(!isEditingEndTime()) loadAgents(sys);
+        loadQueue(sys);
+        loadNext(sys);
+      });
+    }
+
+    function renderAgentCard(a,sys){
+      const status = String(a.status || "OFFLINE");
+      const dotClass = status === "ONLINE" ? "online" : status === "BREAK" ? "break" : "offline";
+      const note = a.note || "ไม่มี note";
+      const endTime = a.endTime || "";
+      const endTimeText = endTime ? `เลิกงาน ${escapeHtml(endTime)} | Offline ก่อน 15 นาที` : "-";
+      const time = splitEndTime(endTime);
+      const timeId = `${sys}_${encodeURIComponent(a.id)}`;
+      const todayCount = Number(a.todayCount || 0);
+      const queueBadge = status === "ONLINE" && a.queueNo ? `<span class="queue-badge">คิว ${escapeHtml(a.queueNo)}</span>` : "";
+
+      return `
+        <div class="agent-card">
+          <div>
+            <div class="agent-mainline">
+              <div class="agent-name"><span class="status-dot ${dotClass}"></span>${escapeHtml(a.name)} ${queueBadge}</div>
+              <span class="assignment-count">วันนี้ ${todayCount} งาน</span>
+              <div class="note">
+                ${escapeHtml(note)}
+                <button class="note-btn" onclick="editNote('${encodeURIComponent(a.id)}','${encodeURIComponent(a.note || "")}','${sys}')">แก้ไข</button>
+                <button class="note-btn" onclick="clearNote('${encodeURIComponent(a.id)}','${sys}')">ล้าง</button>
+              </div>
+            </div>
+            <div class="agent-control-row">
+              <div class="agent-actions">
+                <label class="switch" title="Online / Offline">
+                  <input type="checkbox" ${status === "ONLINE" ? "checked" : ""} onchange="toggle('${encodeURIComponent(a.id)}','${sys}')">
+                  <span class="slider"></span>
+                </label>
+                <button class="break-btn ${status === "BREAK" ? "active" : ""}" onclick="toggleBreak('${encodeURIComponent(a.id)}','${sys}')">พักเบรก</button>
+              </div>
+              <div class="time-controls">
+                <span class="closing-label">⏰ เวลาเลิกงาน</span>
+                <input id="endHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" value="${escapeHtml(time.hour)}" onchange="normalizeAgentEndTimeInputs('${timeId}')">
+                <input id="endMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" value="${escapeHtml(time.hour === "24" ? "00" : time.minute)}" ${time.hour === "24" ? "disabled" : ""} onchange="normalizeAgentEndTimeInputs('${timeId}')">
+                <button class="time-btn" onclick="saveAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึกเวลา</button>
+                <button class="note-btn" onclick="resetAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">รีเซ็ต</button>
+                <span class="closing-chip">${endTimeText}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function normalizeAgentEndTimeInputs(timeId){
+      const hourInput = document.getElementById("endHour_" + timeId);
+      const minuteInput = document.getElementById("endMinute_" + timeId);
+      const rawHour = hourInput?.value || "";
+      const rawMinute = minuteInput?.value || "";
+      const hour = normalizeHour(rawHour);
+      const minute = hour ? normalizeMinute(rawMinute || "00",hour) : "";
+      if(hourInput) hourInput.value = hour;
+      if(minuteInput){
+        minuteInput.value = minute;
+        minuteInput.disabled = hour === "24";
+      }
+      return composeEndTime(hour,minute);
+    }
+
+    function saveAgentEndTime(encodedId,sys,timeId){
+      updateEndTime(encodedId,sys,normalizeAgentEndTimeInputs(timeId));
+    }
+
+    function resetAgentEndTime(encodedId,sys,timeId){
+      const hourInput = document.getElementById("endHour_" + timeId);
+      const minuteInput = document.getElementById("endMinute_" + timeId);
+      if(hourInput) hourInput.value = "";
+      if(minuteInput){
+        minuteInput.disabled = false;
+        minuteInput.value = "";
+      }
+      updateEndTime(encodedId,sys,"");
+    }
+
+    function syncAgentEndTime(encodedId,sys,timeId){
+      const endTime = normalizeAgentEndTimeInputs(timeId);
+      updateEndTime(encodedId,sys,endTime);
+    }
+
+    function updateEndTime(encodedId,sys,endTime){
+      showLoading("กำลังบันทึกเวลาเลิกงาน...");
+      google.script.run
+        .withSuccessHandler(()=>{
+          hideLoading();
+          loadAgents(sys);
+          loadNext(sys);
+        })
+        .withFailureHandler(err=>{
+          hideLoading();
+          alert(err.message || err);
+          loadAgents(sys);
+        })
+        .updateAgentEndTime(decodeURIComponent(encodedId),endTime,sys);
+    }
+
+    function loadAgents(sys){
+      google.script.run.withSuccessHandler(data=>{
+        let on = "", off = "", breakHtml = "";
+        let onCount = 0, offCount = 0, breakCount = 0;
+        const rows = data || [];
+        const onlineRows = rows
+          .filter(a=>a.status === "ONLINE")
+          .sort((a,b)=>Number(a.queueNo || 9999) - Number(b.queueNo || 9999));
+        const breakRows = rows.filter(a=>a.status === "BREAK");
+        const offlineRows = rows.filter(a=>a.status !== "ONLINE" && a.status !== "BREAK");
+
+        onlineRows.forEach(a=>{on += renderAgentCard(a,sys); onCount++});
+        breakRows.forEach(a=>{breakHtml += renderAgentCard(a,sys); breakCount++});
+        offlineRows.forEach(a=>{off += renderAgentCard(a,sys); offCount++});
+
+        document.getElementById("online"+sys).innerHTML = on || `<div class="empty-state">ยังไม่มีคน Online</div>`;
+        document.getElementById("break"+sys).innerHTML = breakHtml || `<div class="empty-state">ยังไม่มีคนพักเบรก</div>`;
+        document.getElementById("offline"+sys).innerHTML = off || `<div class="empty-state">ยังไม่มีคน Offline</div>`;
+        document.getElementById("onlineCount"+sys).innerText = onCount;
+        document.getElementById("breakCount"+sys).innerText = breakCount;
+        document.getElementById("offlineCount"+sys).innerText = offCount;
+
+        const sel = document.getElementById("agent"+sys);
+        const keep = sel.value;
+        sel.innerHTML = `<option value="">🤖Auto ตามลำดับคิว</option>`;
+        rows.forEach(a=>{
+          const queueText = a.status === "ONLINE" && a.queueNo ? ` คิว ${a.queueNo}` : "";
+          sel.innerHTML += `<option value="${escapeHtml(a.id)}">${escapeHtml(a.name)}${escapeHtml(queueText)} (${escapeHtml(a.status)})</option>`;
+        });
+        sel.value = keep;
+      }).getAgents(sys);
+    }
+
+    function editNote(encodedId,encodedOld,sys){
+      const id = decodeURIComponent(encodedId);
+      const old = decodeURIComponent(encodedOld || "");
+      const n = prompt("Note",old);
+      if(n === null) return;
+      google.script.run.withSuccessHandler(()=>loadAgents(sys)).updateAgentNote(id,n,sys);
+    }
+
+    function clearNote(encodedId,sys){
+      const id = decodeURIComponent(encodedId);
+      if(!confirm("ต้องการลบ note ใช่ไหม?")) return;
+      google.script.run.withSuccessHandler(()=>loadAgents(sys)).updateAgentNote(id,"",sys);
+    }
+
+    function toggle(encodedId,sys){
+      showLoading("กำลังเปลี่ยนสถานะ...");
+      google.script.run.withSuccessHandler(()=>{hideLoading();loadAgents(sys);loadNext(sys)}).toggleAgent(decodeURIComponent(encodedId),sys);
+    }
+
+    function toggleBreak(encodedId,sys){
+      showLoading("กำลังเปลี่ยนสถานะพักเบรก...");
+      google.script.run.withSuccessHandler(()=>{hideLoading();loadAgents(sys);loadNext(sys)}).toggleBreak(decodeURIComponent(encodedId),sys);
+    }
+
+    function loadQueue(sys){
+      google.script.run.withSuccessHandler(data=>{
+        let h = "";
+        (data || []).forEach((q,i)=>{
+          h += `
+            <div class="queue-item ${i === 0 ? "latest" : ""}">
+              <span class="queue-ticket">⚡Ticket: ${escapeHtml(q.ticket)}
+              😎 SD : ${escapeHtml(q.agent)} </span> 🧑 CS : ${escapeHtml(q.user || "-")}  ⚙️ Mode : ${escapeHtml(q.mode)} ⏰ วันที่ : ${escapeHtml(formatDate(q.time))}
+            </div>`;
+        });
+        document.getElementById("queue"+sys).innerHTML = h || `<div class="empty-state">ยังไม่มีงานล่าสุด</div>`;
+      }).getLastQueue(sys);
+    }
+
+    function loadHistoryDebounced(){
+      clearTimeout(historySearchTimer);
+      historySearchTimer = setTimeout(loadHistory, 250);
+    }
+
+    function loadHistory(){
+      initHistoryDate();
+      const historyDate = document.getElementById("historyDate")?.value || todayKey();
+      const searchText = document.getElementById("historySearch")?.value || "";
+      const list = document.getElementById("historyList");
+      if(list) list.innerHTML = `<div class="empty-state">กำลังโหลดประวัติการส่งงาน...</div>`;
+
+      google.script.run
+        .withSuccessHandler(renderHistory)
+        .withFailureHandler(err=>{
+          document.getElementById("historyTotal").innerText = "โหลดข้อมูลไม่สำเร็จ";
+          document.getElementById("historyList").innerHTML =
+            `<div class="empty-state">History load failed: ${escapeHtml(err.message || err)}</div>`;
+        })
+        .getAssignmentHistory(historyDate, searchText);
+    }
+
+    function renderHistory(history){
+      const rows = history?.rows || [];
+      document.getElementById("historyTotal").innerText = `พบ ${history?.total || 0} รายการ`;
+      document.getElementById("historyList").innerHTML = rows.length ? `
+        <div class="history-row history-header">
+          <div>หมายเลขงาน</div>
+          <div>เจ้าหน้าที่</div>
+          <div>ผู้ส่งงาน</div>
+          <div>ระบบ</div>
+          <div>เวลาส่งงาน</div>
+        </div>
+        ${rows.map(row=>`
+          <div class="history-row">
+            <div>
+              <div class="small-text">หมายเลขงาน</div>
+              <span class="history-ticket">${escapeHtml(row.ticket || "-")}</span>
+            </div>
+            <div>
+              <div class="small-text">เจ้าหน้าที่</div>
+              <strong>${escapeHtml(row.agent || "-")}</strong>
+            </div>
+            <div>
+              <div class="small-text">ผู้ส่งงาน</div>
+              <strong>${escapeHtml(row.user || "-")}</strong>
+            </div>
+            <div>
+              <div class="small-text">ระบบ</div>
+              <span class="tag">${escapeHtml(row.system || "-")}</span>
+            </div>
+            <div>
+              <div class="small-text">เวลาส่งงาน</div>
+              <span class="history-time">${escapeHtml(formatDate(row.time))}</span>
+            </div>
+          </div>
+        `).join("")}
+      ` : `<div class="empty-state">ไม่พบประวัติการส่งงานตามเงื่อนไขที่เลือก</div>`;
+    }
+
+    function loadNext(sys){
+      google.script.run.withSuccessHandler(a=>{
+        document.getElementById("next"+sys).innerHTML = a ? `⏳ ลำดับถัดไป: ${escapeHtml(a.name)}` : "ยังไม่มีคน Online สำหรับรับงาน";
+      }).getNextInQueue(sys);
+    }
+
+    function deleteLast(sys){
+      if(!confirm("ยืนยันลบงานล่าสุดของ " + sys + " ?")) return;
+      showLoading("กำลังลบงานล่าสุด...");
+      google.script.run.withSuccessHandler(()=>{hideLoading();loadQueue(sys);loadNext(sys)}).deleteLastTicket(sys);
+    }
+
+    function loadStoreDebounced(){
+      clearTimeout(storeSearchTimer);
+      storeSearchTimer = setTimeout(loadStore, 250);
+    }
+
+    function loadStore(){
+      const searchText = document.getElementById("storeSearch")?.value.trim() || "";
+      const total = document.getElementById("storeTotal");
+      const results = document.getElementById("storeResults");
+      if(!results) return;
+
+      if(!searchText){
+        total.innerText = "พิมพ์คำค้นเพื่อดูข้อมูลร้าน";
+        results.innerHTML = `<div class="empty-state">พิมพ์ storeid หรือ storename แล้วกดค้นหา</div>`;
+        return;
+      }
+
+      total.innerText = "กำลังค้นหา...";
+      results.innerHTML = `<div class="empty-state">กำลังค้นหาข้อมูลร้าน...</div>`;
+
+      google.script.run
+        .withSuccessHandler(renderStore)
+        .withFailureHandler(err=>{
+          total.innerText = "ค้นหาไม่สำเร็จ";
+          results.innerHTML = `<div class="empty-state">${escapeHtml(err.message || err)}</div>`;
+        })
+        .getStoreData(searchText);
+    }
+
+    function renderStore(data){
+      const rows = data?.rows || [];
+      document.getElementById("storeTotal").innerText = `พบ ${data?.total || 0} รายการ`;
+      document.getElementById("storeResults").innerHTML = rows.length ? rows.map(row=>`
+        <div class="store-card">
+          <h3>${escapeHtml(row.storeid || "-")} | ${escapeHtml(row.storename || "-")}</h3>
+          <div class="store-grid">
+            <div class="store-field"><span>brand</span><strong>${escapeHtml(row.brand || "-")}</strong></div>
+            <div class="store-field"><span>abb</span><strong>${escapeHtml(row.abb || "-")}</strong></div>
+            <div class="store-field">
+              <span>ipaddress</span>
+              <strong>${escapeHtml(row.ipaddress || "-")}</strong>
+              ${row.ipaddress ? `<button class="icon-copy" title="Copy IP" onclick="copyText('${encodeURIComponent(row.ipaddress)}')">⧉</button>` : ""}
+            </div>
+            <div class="store-field"><span>province</span><strong>${escapeHtml(row.province || "-")}</strong></div>
+            <div class="store-field"><span>service</span><strong>${escapeHtml(row.service || "-")}</strong></div>
+            <div class="store-field"><span>Telephone</span><strong>${escapeHtml(row.telephone || "-")}</strong></div>
+            <div class="store-field"><span>email</span><strong>${escapeHtml(row.email || "-")}</strong></div>
+            <div class="store-field"><span>BKK/UPC</span><strong>${escapeHtml(row.area || "-")}</strong></div>
+          </div>
+        </div>
+      `).join("") : `<div class="empty-state">ไม่พบข้อมูลร้านตามคำค้นนี้</div>`;
+    }
+
+    function loadReport(){
+      initReportDate();
+      const reportDate = document.getElementById("reportDate")?.value || todayKey();
+      google.script.run
+        .withSuccessHandler(renderReport)
+        .withFailureHandler(err=>{
+          SYSTEMS.forEach(sys=>{
+            document.getElementById("hourly"+sys).innerHTML =
+              `<div class="empty-state">Report load failed: ${escapeHtml(err.message || err)}</div>`;
+            document.getElementById("agentSummary"+sys).innerHTML = "";
+            document.getElementById("userSummary"+sys).innerHTML = "";
+          });
+        })
+        .getReportData(reportDate);
+    }
+
+    function renderReport(report){
+      SYSTEMS.forEach(sys=>{
+        const data = report?.systems?.[sys] || {total:0,hourly:[],byAgent:[],byUser:[]};
+        const skipped = data.skippedRows ? ` | skipped ${data.skippedRows} rows` : "";
+        document.getElementById("reportTotal"+sys).innerText =
+          `Total ${data.total || 0} jobs from ${data.sheetName || "Queue_" + sys}${skipped}`;
+        renderHourlyChart("hourly"+sys, data.hourly || []);
+        renderAgentSummary("agentSummary"+sys, data.byAgent || []);
+        renderUserSummary("userSummary"+sys, data.byUser || []);
+      });
+    }
+
+    function renderHourlyChart(id, hourly){
+      const max = Math.max(1,...hourly.map(h=>h.count || 0));
+      const html = hourly.map(h=>{
+        const height = Math.max(3, Math.round(((h.count || 0) / max) * 150));
+        return `
+          <div class="bar-wrap" title="${h.hour}:00 = ${h.count || 0}">
+            <div class="bar-count">${h.count || ""}</div>
+            <div class="bar" style="height:${height}px"></div>
+            <div class="bar-label">${String(h.hour).padStart(2,"0")}</div>
+          </div>`;
+      }).join("");
+      document.getElementById(id).innerHTML = html || `<div class="empty-state">ยังไม่มีข้อมูล</div>`;
+    }
+
+    function renderAgentSummary(id, rows){
+      const max = Math.max(1,...rows.map(r=>r.count || 0));
+      document.getElementById(id).innerHTML = rows.length ? rows.map(r=>`
+        <div class="summary-row summary-bar-row" style="--bar-width:${Math.round(((r.count || 0) / max) * 100)}%">
+          <strong>${escapeHtml(r.name)}</strong>
+          <span>${r.count} jobs</span>
+        </div>
+      `).join("") : `<div class="empty-state">No queue data</div>`;
+    }
+
+    function renderUserSummary(id, rows){
+      const max = Math.max(1,...rows.map(r=>r.count || 0));
+      document.getElementById(id).innerHTML = rows.length ? rows.map(r=>`
+        <div class="summary-row summary-bar-row" style="--bar-width:${Math.round(((r.count || 0) / max) * 100)}%">
+          <strong>${escapeHtml(r.name)}</strong>
+          <span>${r.count} sent</span>
+        </div>
+      `).join("") : `<div class="empty-state">No user data</div>`;
+    }
+
+    function loadAdmin(){
+      if(currentGroup() !== "admin") return;
+      google.script.run.withSuccessHandler(data=>{
+        adminAgentsCache = data || {};
+        renderAdminAgents();
+      }).getAdminAgents(currentUser());
+
+      google.script.run.withSuccessHandler(renderAdminUsers).getUsersAdmin(currentUser());
+    }
+
+    function renderAdminAgents(){
+      let html = "";
+      SYSTEMS.forEach(sys=>{
+        html += `<div class="section-title" style="margin-top:14px">${sys}</div>`;
+        const rows = adminAgentsCache[sys] || [];
+        html += rows.length ? rows.map(a=>`
+          <div class="data-row">
+            <div>
+              <strong>${escapeHtml(a.name)}</strong>
+              <div class="small-text">ID: ${escapeHtml(a.id)} | ${escapeHtml(a.status)} | เลิกงาน: ${escapeHtml(a.endTime || "-")} | ${escapeHtml(a.note || "-")}</div>
+            </div>
+            <div class="admin-actions">
+              <button class="secondary-btn" onclick="fillAgentForm('${sys}','${encodeURIComponent(a.id)}','${encodeURIComponent(a.name)}','${encodeURIComponent(a.status)}','${encodeURIComponent(a.note || "")}','${encodeURIComponent(a.endTime || "")}')">แก้ไข</button>
+              <button class="danger-btn" onclick="deleteAdminAgent('${sys}','${encodeURIComponent(a.id)}')">ลบ</button>
+            </div>
+          </div>
+        `).join("") : `<div class="empty-state">ยังไม่มีรายชื่อ</div>`;
+      });
+      document.getElementById("adminAgents").innerHTML = html;
+    }
+
+    function fillAgentForm(sys,id,name,status,note,endTime){
+      document.getElementById("adminAgentSystem").value = sys;
+      document.getElementById("adminAgentId").value = decodeURIComponent(id);
+      document.getElementById("adminAgentName").value = decodeURIComponent(name);
+      document.getElementById("adminAgentStatus").value = decodeURIComponent(status || "OFFLINE");
+      document.getElementById("adminAgentNote").value = decodeURIComponent(note || "");
+      refreshTimeInputs("adminAgentEndTime", decodeURIComponent(endTime || ""));
+    }
+
+    function syncAdminEndTimeInputs(){
+      const hourInput = document.getElementById("adminAgentEndTimeHour");
+      const minuteInput = document.getElementById("adminAgentEndTimeMinute");
+      const hour = normalizeHour(hourInput?.value || "");
+      const minute = normalizeMinute(minuteInput?.value || "00",hour);
+      if(hourInput) hourInput.value = hour;
+      if(minuteInput){
+        minuteInput.value = minute;
+        minuteInput.disabled = hour === "24";
+      }
+    }
+
+    function saveAdminAgent(){
+      syncAdminEndTimeInputs();
+      const agent = {
+        id: document.getElementById("adminAgentId").value.trim(),
+        name: document.getElementById("adminAgentName").value.trim(),
+        status: document.getElementById("adminAgentStatus").value,
+        note: document.getElementById("adminAgentNote").value.trim(),
+        endTime: composeEndTime(
+          document.getElementById("adminAgentEndTimeHour").value,
+          document.getElementById("adminAgentEndTimeMinute").value
+        )
+      };
+      const sys = document.getElementById("adminAgentSystem").value;
+      if(!agent.name) return alert("กรุณาใส่ชื่อเจ้าหน้าที่");
+
+      google.script.run.withSuccessHandler(()=>{
+        clearAgentForm();
+        loadAdmin();
+        loadAll();
+      }).saveAgentAdmin(currentUser(),sys,agent);
+    }
+
+    function clearAgentForm(){
+      ["adminAgentId","adminAgentName","adminAgentNote"].forEach(id=>document.getElementById(id).value = "");
+      refreshTimeInputs("adminAgentEndTime");
+      document.getElementById("adminAgentStatus").value = "OFFLINE";
+    }
+
+    function deleteAdminAgent(sys,encodedId){
+      if(!confirm("ยืนยันลบเจ้าหน้าที่?")) return;
+      google.script.run.withSuccessHandler(()=>{loadAdmin();loadAll()}).deleteAgentAdmin(currentUser(),sys,decodeURIComponent(encodedId));
+    }
+
+    function renderAdminUsers(rows){
+      document.getElementById("adminUsers").innerHTML = (rows || []).length ? rows.map(u=>`
+        <div class="data-row">
+          <div>
+            <strong>${escapeHtml(u.username)}</strong>
+            <div class="small-text">Group: ${escapeHtml(u.group)}</div>
+          </div>
+          <div class="admin-actions">
+            <button class="secondary-btn" onclick="fillUserForm('${encodeURIComponent(u.username)}','${encodeURIComponent(u.password)}','${encodeURIComponent(u.group)}')">แก้ไข</button>
+            <button class="danger-btn" onclick="deleteAdminUser('${encodeURIComponent(u.username)}')">ลบ</button>
+          </div>
+        </div>
+      `).join("") : `<div class="empty-state">ยังไม่มี user</div>`;
+    }
+
+    function fillUserForm(username,password,group){
+      document.getElementById("adminUsername").value = decodeURIComponent(username);
+      document.getElementById("adminPassword").value = decodeURIComponent(password);
+      document.getElementById("adminGroup").value = decodeURIComponent(group || "user");
+    }
+
+    function saveAdminUser(){
+      const userData = {
+        username: document.getElementById("adminUsername").value.trim(),
+        password: document.getElementById("adminPassword").value,
+        group: document.getElementById("adminGroup").value
+      };
+      if(!userData.username || !userData.password) return alert("กรุณาใส่ Username และ Password");
+
+      google.script.run.withSuccessHandler(()=>{
+        document.getElementById("adminUsername").value = "";
+        document.getElementById("adminPassword").value = "";
+        document.getElementById("adminGroup").value = "user";
+        loadAdmin();
+      }).saveUserAdmin(currentUser(),userData);
+    }
+
+    function deleteAdminUser(encodedUsername){
+      if(!confirm("ยืนยันลบ user?")) return;
+      google.script.run.withSuccessHandler(loadAdmin).deleteUserAdmin(currentUser(),decodeURIComponent(encodedUsername));
+    }
+
+    function showLoading(text="กำลังอัปเดต..."){
+      hideLoading();
+      document.body.insertAdjacentHTML("beforeend",`
+        <div class="loading-overlay" id="loadingState">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <div>${escapeHtml(text)}</div>
+          </div>
+        </div>
+      `);
+    }
+
+    function hideLoading(){
+      document.getElementById("loadingState")?.remove();
+    }
+
+    function formatDate(dateStr){
+      const d = new Date(dateStr);
+      if(Number.isNaN(d.getTime())) return dateStr || "-";
+      return d.toLocaleString("th-TH",{hour12:false});
+    }
+
+    document.addEventListener("keydown",e=>{
+      const loginVisible = document.getElementById("loginPage")?.style.display !== "none";
+      if(e.key === "Enter" && loginVisible) login();
+    });
+
+    (function initLogin(){
+      applyTheme();
+      initTimeSelectors();
+      initReportDate();
+      initHistoryDate();
+      if(localStorage.getItem("login") === "true"){
+        enterApp();
+      }else{
+        document.getElementById("loginPage").style.display = "flex";
+        document.getElementById("appPage").style.display = "none";
+      }
+    })();
+
+    setInterval(()=>{
+      if(localStorage.getItem("login") === "true"){
+        autoRefresh();
+        if(document.getElementById("reportPage").classList.contains("active")) loadReport();
+      }
+    },4000);
+  </script>
+</body>
+</html>
