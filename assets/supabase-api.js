@@ -3,6 +3,8 @@
   const APP_TZ = "Asia/Bangkok";
   const OFFLINE_BEFORE_END_MINUTES = 15;
   const END_TIME_RESET_HOUR = 5;
+  const END_TIME_RESET_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+  let lastEndTimeResetCheck = 0;
 
   const config = window.APP_CONFIG || {};
   const missingConfig =
@@ -132,6 +134,29 @@
     return data?.agent_id || null;
   }
 
+  async function cleanupOldQueueHistory() {
+    assertReady();
+    const cutoff = new Date();
+    cutoff.setMonth(cutoff.getMonth() - 1);
+    const { error } = await db
+      .from("queue")
+      .delete()
+      .lt("assigned_at", cutoff.toISOString());
+    if (error) console.warn("Queue history cleanup failed", error);
+  }
+
+  async function resetEndTimesIfNeeded() {
+    assertReady();
+    const now = Date.now();
+    if (now - lastEndTimeResetCheck < END_TIME_RESET_CHECK_INTERVAL_MS) return;
+    lastEndTimeResetCheck = now;
+
+    const { error } = await db.rpc("reset_agent_end_times_if_needed");
+    if (error) {
+      console.warn("Agent end time reset check failed", error);
+    }
+  }
+
   function getNextAgent(agents, lastId) {
     if (!agents.length) return null;
     const index = agents.findIndex((agent) => String(agent.id) === String(lastId));
@@ -139,6 +164,7 @@
   }
 
   async function applyEndTimeCutoff(system) {
+    await resetEndTimesIfNeeded();
     const agents = await orderedAgents(system);
     const nowMinutes = toWorkdayMinutes(getThailandMinutesOfDay());
     const updates = agents
@@ -316,6 +342,7 @@
   async function assignTicket(ticket, system, manualAgentId, user) {
     assertReady();
     if (!ticket) return { ok: false, message: "No ticket" };
+    await cleanupOldQueueHistory();
     await applyEndTimeCutoff(system);
 
     const agents = await getAgents(system);
@@ -351,20 +378,6 @@
       copyName: getFirstName(selected.fullName || selected.name),
       mode
     };
-  }
-
-  async function getStoreData(searchText) {
-    assertReady();
-    const query = String(searchText || "").trim();
-    if (!query) return { rows: [], total: 0 };
-    const clean = query.replace(/[%_,]/g, "");
-    const { data, error } = await db
-      .from("stores")
-      .select("storeid, brand, storename, abb, ipaddress, province, service, telephone, email, area")
-      .or(`storeid.ilike.%${clean}%,storename.ilike.%${clean}%`)
-      .limit(100);
-    if (error) throw error;
-    return { rows: data || [], total: (data || []).length };
   }
 
   async function getLastQueue(system) {
@@ -581,7 +594,6 @@
     updateAgentEndTime,
     getNextInQueue,
     assignTicket,
-    getStoreData,
     getLastQueue,
     deleteLastTicket,
     getReportData,
