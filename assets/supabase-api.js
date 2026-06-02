@@ -304,9 +304,14 @@
     const agent = agents.find((row) => String(row.id) === String(id));
     if (!agent) return undefined;
     const newStatus = agent.status === "ONLINE" ? "OFFLINE" : "ONLINE";
+    const patch = {
+      status: newStatus,
+      updated_at: new Date().toISOString()
+    };
+    if (newStatus === "ONLINE") patch.break_time = "";
     const { error } = await db
       .from("agents")
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .update(patch)
       .eq("system", system)
       .eq("id", id);
     if (error) throw error;
@@ -319,9 +324,14 @@
     const agent = agents.find((row) => String(row.id) === String(id));
     if (!agent) return undefined;
     const newStatus = agent.status === "BREAK" ? "ONLINE" : "BREAK";
+    const patch = {
+      status: newStatus,
+      updated_at: new Date().toISOString()
+    };
+    if (newStatus === "ONLINE") patch.break_time = "";
     const { error } = await db
       .from("agents")
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .update(patch)
       .eq("system", system)
       .eq("id", id);
     if (error) throw error;
