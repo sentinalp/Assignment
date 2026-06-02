@@ -977,14 +977,36 @@ body:not(.light-mode) .next-inline{
       grid-template-columns:1fr;
       gap:6px;
       justify-items:end;
+      width:100%;
     }
 
     .time-row{
       display:grid;
-      grid-template-columns:74px 54px 54px auto auto minmax(92px,auto);
+      grid-template-columns:88px 54px 54px auto auto minmax(176px,auto);
       align-items:center;
       gap:6px;
+      width:min(100%,560px);
       max-width:100%;
+    }
+
+    .closing-label{
+      display:block;
+      width:88px;
+      text-align:left;
+      font-size:13px;
+      font-weight:1000;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .closing-label.end-label{
+      color:#fca5a5;
+      text-shadow:0 0 14px rgba(248,113,113,.16);
+    }
+
+    .closing-label.break-label{
+      color:#fbbf24;
+      text-shadow:0 0 14px rgba(251,191,36,.16);
     }
 
     .note-row{
@@ -1018,7 +1040,8 @@ body:not(.light-mode) .next-inline{
     @media(max-width:760px){
       .agent-control-row{grid-template-columns:1fr}
       .time-controls{justify-items:start}
-      .time-row{grid-template-columns:70px 50px 50px auto auto}
+      .time-row{grid-template-columns:78px 50px 50px auto auto}
+      .closing-label{width:78px}
       .time-row .closing-chip{grid-column:1 / -1}
     }
 
@@ -1947,7 +1970,7 @@ body:not(.light-mode) .agent-card{
               </div>
               <div class="time-controls">
                 <div class="time-row">
-                  <span class="closing-label">เลิกงาน</span>
+                  <span class="closing-label end-label">เลิกงาน</span>
                   <input id="endHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" value="${escapeHtml(time.hour)}" onchange="normalizeAgentEndTimeInputs('${timeId}')">
                   <input id="endMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" value="${escapeHtml(time.hour === "24" ? "00" : time.minute)}" ${time.hour === "24" ? "disabled" : ""} onchange="normalizeAgentEndTimeInputs('${timeId}')">
                   <button class="time-btn" onclick="saveAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
@@ -1955,7 +1978,7 @@ body:not(.light-mode) .agent-card{
                   <span class="closing-chip">${endTimeText}</span>
                 </div>
                 <div class="time-row">
-                  <span class="closing-label">พักเบรก</span>
+                  <span class="closing-label break-label">พักเบรก</span>
                   <input id="breakHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงพักเบรก" value="${escapeHtml(breakAt.hour)}" onchange="normalizeAgentBreakTimeInputs('${timeId}')">
                   <input id="breakMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีพักเบรก" value="${escapeHtml(breakAt.hour === "24" ? "00" : breakAt.minute)}" ${breakAt.hour === "24" ? "disabled" : ""} onchange="normalizeAgentBreakTimeInputs('${timeId}')">
                   <button class="time-btn" onclick="saveAgentBreakTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
