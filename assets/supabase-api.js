@@ -2,6 +2,7 @@
   const SYSTEMS = ["KFC", "NONKFC"];
   const APP_TZ = "Asia/Bangkok";
   const OFFLINE_BEFORE_END_MINUTES = 15;
+  const BREAK_BEFORE_START_MINUTES = 15;
   const END_TIME_RESET_HOUR = 5;
   const END_TIME_RESET_CHECK_INTERVAL_MS = 5 * 60 * 1000;
   let lastEndTimeResetCheck = 0;
@@ -167,7 +168,7 @@
     await resetEndTimesIfNeeded();
     const agents = await orderedAgents(system);
     const nowMinutes = toWorkdayMinutes(getThailandMinutesOfDay());
-    const updates = agents
+    const offlineUpdates = agents
       .filter((agent) => {
         const endMinutes = parseTimeToMinutes(agent.end_time);
         if (String(agent.status).toUpperCase() !== "ONLINE" || endMinutes === null) return false;
@@ -175,13 +176,32 @@
       })
       .map((agent) => agent.id);
 
-    if (!updates.length) return;
-    const { error } = await db
-      .from("agents")
-      .update({ status: "OFFLINE", updated_at: new Date().toISOString() })
-      .eq("system", system)
-      .in("id", updates);
-    if (error) throw error;
+    const breakUpdates = agents
+      .filter((agent) => {
+        const breakMinutes = parseTimeToMinutes(agent.break_time);
+        if (String(agent.status).toUpperCase() !== "ONLINE" || breakMinutes === null) return false;
+        return nowMinutes >= toWorkdayMinutes(breakMinutes) - BREAK_BEFORE_START_MINUTES;
+      })
+      .map((agent) => agent.id)
+      .filter((id) => !offlineUpdates.includes(id));
+
+    if (offlineUpdates.length) {
+      const { error } = await db
+        .from("agents")
+        .update({ status: "OFFLINE", updated_at: new Date().toISOString() })
+        .eq("system", system)
+        .in("id", offlineUpdates);
+      if (error) throw error;
+    }
+
+    if (breakUpdates.length) {
+      const { error } = await db
+        .from("agents")
+        .update({ status: "BREAK", updated_at: new Date().toISOString() })
+        .eq("system", system)
+        .in("id", breakUpdates);
+      if (error) throw error;
+    }
   }
 
   async function getAssignmentCountsByAgent(system, reportDate) {
@@ -211,6 +231,7 @@
       status: row.status || "OFFLINE",
       note: row.note || "",
       endTime: formatEndTime(row.end_time),
+      breakTime: formatEndTime(row.break_time),
       fullName: row.full_name || "",
       todayCount: counts[String(row.name || "").trim()] || 0
     }));
@@ -238,6 +259,7 @@
       status: row.status || "OFFLINE",
       note: row.note || "",
       end_time: row.end_time || "",
+      break_time: row.break_time || "",
       full_name: row.full_name || "",
       position: index + 1,
       updated_at: new Date().toISOString()
@@ -325,6 +347,21 @@
     const { error } = await db
       .from("agents")
       .update({ end_time: cleanEndTime, updated_at: new Date().toISOString() })
+      .eq("system", system)
+      .eq("id", id);
+    if (error) throw error;
+    await applyEndTimeCutoff(system);
+    return "OK";
+  }
+
+  async function updateAgentBreakTime(id, breakTime, system) {
+    const cleanBreakTime = formatEndTime(breakTime);
+    if (cleanBreakTime && parseTimeToMinutes(cleanBreakTime) === null) {
+      throw new Error("Invalid break time");
+    }
+    const { error } = await db
+      .from("agents")
+      .update({ break_time: cleanBreakTime, updated_at: new Date().toISOString() })
       .eq("system", system)
       .eq("id", id);
     if (error) throw error;
@@ -523,9 +560,11 @@
     await requireAdmin(username);
     const id = agent.id || `AG${Date.now()}`;
     const endTime = formatEndTime(agent.endTime);
-    if (endTime && parseTimeToMinutes(endTime) === null) throw new Error("Invalid end time");
     const rows = await orderedAgents(system);
     const current = rows.find((row) => String(row.id) === String(id));
+    const breakTime = formatEndTime(agent.breakTime || current?.break_time || "");
+    if (endTime && parseTimeToMinutes(endTime) === null) throw new Error("Invalid end time");
+    if (breakTime && parseTimeToMinutes(breakTime) === null) throw new Error("Invalid break time");
     const { error } = await db.from("agents").upsert({
       system,
       id,
@@ -533,6 +572,7 @@
       status: agent.status || "OFFLINE",
       note: agent.note || "",
       end_time: endTime,
+      break_time: breakTime,
       full_name: agent.fullName || current?.full_name || "",
       position: current?.position || rows.length + 1,
       updated_at: new Date().toISOString()
@@ -592,6 +632,7 @@
     toggleBreak,
     updateAgentNote,
     updateAgentEndTime,
+    updateAgentBreakTime,
     getNextInQueue,
     assignTicket,
     getLastQueue,
