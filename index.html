@@ -928,11 +928,11 @@ body:not(.light-mode) .next-inline{
     }
 
     .end-time-field{
-      width:78px;
-      min-height:38px;
-      padding:8px 12px;
-      border-radius:14px;
-      font-size:13px;
+      width:54px;
+      min-height:32px;
+      padding:6px 8px;
+      border-radius:10px;
+      font-size:12px;
       font-weight:900;
       cursor:pointer;
     }
@@ -973,11 +973,18 @@ body:not(.light-mode) .next-inline{
     }
 
     .time-controls{
-      display:flex;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:6px;
+      justify-items:end;
+    }
+
+    .time-row{
+      display:grid;
+      grid-template-columns:74px 54px 54px auto auto minmax(92px,auto);
       align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      gap:6px;
+      max-width:100%;
     }
 
     .note-row{
@@ -991,21 +998,28 @@ body:not(.light-mode) .next-inline{
     .agent-control-row{
       margin-top:10px;
       display:grid;
-      grid-template-columns:auto minmax(260px,1fr);
+      grid-template-columns:auto minmax(360px,1fr);
       align-items:center;
-      gap:28px;
+      gap:18px;
     }
 
     .time-btn{
-      min-height:34px;
-      padding:7px 10px;
-      border-radius:12px;
+      min-height:30px;
+      padding:5px 8px;
+      border-radius:10px;
       background:rgba(47,128,237,.12);
       color:var(--ink);
       border:1px solid rgba(47,128,237,.18);
       font-weight:900;
-      font-size:12px;
+      font-size:11px;
       box-shadow:var(--shadow-soft);
+    }
+
+    @media(max-width:760px){
+      .agent-control-row{grid-template-columns:1fr}
+      .time-controls{justify-items:start}
+      .time-row{grid-template-columns:70px 50px 50px auto auto}
+      .time-row .closing-chip{grid-column:1 / -1}
     }
 
     .summary-bar-row{
@@ -1903,7 +1917,10 @@ body:not(.light-mode) .agent-card{
       const note = a.note || "ไม่มี note";
       const endTime = a.endTime || "";
       const endTimeText = endTime ? `เลิกงาน ${escapeHtml(endTime)} | Offline ก่อน 15 นาที` : "-";
+      const breakTime = a.breakTime || "";
+      const breakTimeText = breakTime ? `พัก ${escapeHtml(breakTime)} | Break ก่อน 15 นาที` : "-";
       const time = splitEndTime(endTime);
+      const breakAt = splitEndTime(breakTime);
       const timeId = `${sys}_${encodeURIComponent(a.id)}`;
       const todayCount = Number(a.todayCount || 0);
       const queueBadge = status === "ONLINE" && a.queueNo ? `<span class="queue-badge">คิว ${escapeHtml(a.queueNo)}</span>` : "";
@@ -1929,12 +1946,22 @@ body:not(.light-mode) .agent-card{
                 <button class="break-btn ${status === "BREAK" ? "active" : ""}" onclick="toggleBreak('${encodeURIComponent(a.id)}','${sys}')">พักเบรก</button>
               </div>
               <div class="time-controls">
-                <span class="closing-label">⏰ เวลาเลิกงาน</span>
-                <input id="endHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" value="${escapeHtml(time.hour)}" onchange="normalizeAgentEndTimeInputs('${timeId}')">
-                <input id="endMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" value="${escapeHtml(time.hour === "24" ? "00" : time.minute)}" ${time.hour === "24" ? "disabled" : ""} onchange="normalizeAgentEndTimeInputs('${timeId}')">
-                <button class="time-btn" onclick="saveAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึกเวลา</button>
-                <button class="note-btn" onclick="resetAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">รีเซ็ต</button>
-                <span class="closing-chip">${endTimeText}</span>
+                <div class="time-row">
+                  <span class="closing-label">เลิกงาน</span>
+                  <input id="endHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" value="${escapeHtml(time.hour)}" onchange="normalizeAgentEndTimeInputs('${timeId}')">
+                  <input id="endMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" value="${escapeHtml(time.hour === "24" ? "00" : time.minute)}" ${time.hour === "24" ? "disabled" : ""} onchange="normalizeAgentEndTimeInputs('${timeId}')">
+                  <button class="time-btn" onclick="saveAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
+                  <button class="note-btn" onclick="resetAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">ล้าง</button>
+                  <span class="closing-chip">${endTimeText}</span>
+                </div>
+                <div class="time-row">
+                  <span class="closing-label">พักเบรก</span>
+                  <input id="breakHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงพักเบรก" value="${escapeHtml(breakAt.hour)}" onchange="normalizeAgentBreakTimeInputs('${timeId}')">
+                  <input id="breakMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีพักเบรก" value="${escapeHtml(breakAt.hour === "24" ? "00" : breakAt.minute)}" ${breakAt.hour === "24" ? "disabled" : ""} onchange="normalizeAgentBreakTimeInputs('${timeId}')">
+                  <button class="time-btn" onclick="saveAgentBreakTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
+                  <button class="note-btn" onclick="resetAgentBreakTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">ล้าง</button>
+                  <span class="closing-chip">${breakTimeText}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1961,6 +1988,25 @@ body:not(.light-mode) .agent-card{
       updateEndTime(encodedId,sys,normalizeAgentEndTimeInputs(timeId));
     }
 
+    function normalizeAgentBreakTimeInputs(timeId){
+      const hourInput = document.getElementById("breakHour_" + timeId);
+      const minuteInput = document.getElementById("breakMinute_" + timeId);
+      const rawHour = hourInput?.value || "";
+      const rawMinute = minuteInput?.value || "";
+      const hour = normalizeHour(rawHour);
+      const minute = hour ? normalizeMinute(rawMinute || "00",hour) : "";
+      if(hourInput) hourInput.value = hour;
+      if(minuteInput){
+        minuteInput.value = minute;
+        minuteInput.disabled = hour === "24";
+      }
+      return composeEndTime(hour,minute);
+    }
+
+    function saveAgentBreakTime(encodedId,sys,timeId){
+      updateBreakTime(encodedId,sys,normalizeAgentBreakTimeInputs(timeId));
+    }
+
     function resetAgentEndTime(encodedId,sys,timeId){
       const hourInput = document.getElementById("endHour_" + timeId);
       const minuteInput = document.getElementById("endMinute_" + timeId);
@@ -1970,6 +2016,17 @@ body:not(.light-mode) .agent-card{
         minuteInput.value = "";
       }
       updateEndTime(encodedId,sys,"");
+    }
+
+    function resetAgentBreakTime(encodedId,sys,timeId){
+      const hourInput = document.getElementById("breakHour_" + timeId);
+      const minuteInput = document.getElementById("breakMinute_" + timeId);
+      if(hourInput) hourInput.value = "";
+      if(minuteInput){
+        minuteInput.disabled = false;
+        minuteInput.value = "";
+      }
+      updateBreakTime(encodedId,sys,"");
     }
 
     function syncAgentEndTime(encodedId,sys,timeId){
@@ -1991,6 +2048,22 @@ body:not(.light-mode) .agent-card{
           loadAgents(sys);
         })
         .updateAgentEndTime(decodeURIComponent(encodedId),endTime,sys);
+    }
+
+    function updateBreakTime(encodedId,sys,breakTime){
+      showLoading("กำลังบันทึกเวลาพักเบรก...");
+      google.script.run
+        .withSuccessHandler(()=>{
+          hideLoading();
+          loadAgents(sys);
+          loadNext(sys);
+        })
+        .withFailureHandler(err=>{
+          hideLoading();
+          alert(err.message || err);
+          loadAgents(sys);
+        })
+        .updateAgentBreakTime(decodeURIComponent(encodedId),breakTime,sys);
     }
 
     function loadAgents(sys){
