@@ -231,6 +231,48 @@
       font-size:19px;
     }
 
+    .head-status-summary{
+      min-width:260px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      align-self:center;
+    }
+
+    .head-status-item{
+      min-height:56px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:4px;
+      padding:8px 10px;
+      border-radius:14px;
+      background:rgba(15,23,42,.18);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow-inset);
+    }
+
+    .head-status-label{
+      display:flex;
+      align-items:center;
+      gap:5px;
+      color:var(--ink);
+      font-size:12px;
+      font-weight:1000;
+      white-space:nowrap;
+    }
+
+    .head-status-count{
+      color:#fff;
+      font-size:20px;
+      font-weight:1000;
+      line-height:1;
+    }
+
+    .head-status-item.online .head-status-count{color:#86efac}
+    .head-status-item.break .head-status-count{color:#facc15}
+    .head-status-item.offline .head-status-count{color:#fca5a5}
+
     .small-text{color:var(--muted);font-size:13px}
 
     .tag{
@@ -1038,6 +1080,9 @@ body:not(.light-mode) .next-inline{
     }
 
     @media(max-width:760px){
+      .system-head{flex-direction:column}
+      .head-status-summary{width:100%;min-width:0}
+      .head-status-label{font-size:11px}
       .agent-control-row{grid-template-columns:1fr}
       .time-controls{justify-items:start}
       .time-row{grid-template-columns:78px 50px 50px auto auto}
@@ -1396,6 +1441,20 @@ body:not(.light-mode) .agent-card{
                     <div class="small-text">ส่งงานตามคิวหรือเลือกเจ้าหน้าที่เอง</div>
                   </div>
                 </div>
+                <div class="head-status-summary" aria-label="KFC status summary">
+                  <div class="head-status-item online">
+                    <div class="head-status-label">🙋‍♂️ ONLINE</div>
+                    <div id="headOnlineCountKFC" class="head-status-count">0</div>
+                  </div>
+                  <div class="head-status-item break">
+                    <div class="head-status-label">🙅 BREAK</div>
+                    <div id="headBreakCountKFC" class="head-status-count">0</div>
+                  </div>
+                  <div class="head-status-item offline">
+                    <div class="head-status-label">🤦 OFFLINE</div>
+                    <div id="headOfflineCountKFC" class="head-status-count">0</div>
+                  </div>
+                </div>
               </div>
 
               <div class="ticket-row">
@@ -1433,6 +1492,20 @@ body:not(.light-mode) .agent-card{
                     <span class="tag">NONKFC</span>
                     <h2>มอบหมายงาน NONKFC</h2>
                     <div class="small-text">ส่งงานตามคิวหรือเลือกเจ้าหน้าที่เอง</div>
+                  </div>
+                </div>
+                <div class="head-status-summary" aria-label="NONKFC status summary">
+                  <div class="head-status-item online">
+                    <div class="head-status-label">🙋‍♂️ ONLINE</div>
+                    <div id="headOnlineCountNONKFC" class="head-status-count">0</div>
+                  </div>
+                  <div class="head-status-item break">
+                    <div class="head-status-label">🙅 BREAK</div>
+                    <div id="headBreakCountNONKFC" class="head-status-count">0</div>
+                  </div>
+                  <div class="head-status-item offline">
+                    <div class="head-status-label">🤦 OFFLINE</div>
+                    <div id="headOfflineCountNONKFC" class="head-status-count">0</div>
                   </div>
                 </div>
               </div>
@@ -2110,6 +2183,12 @@ body:not(.light-mode) .agent-card{
         document.getElementById("onlineCount"+sys).innerText = onCount;
         document.getElementById("breakCount"+sys).innerText = breakCount;
         document.getElementById("offlineCount"+sys).innerText = offCount;
+        const headOnline = document.getElementById("headOnlineCount"+sys);
+        const headBreak = document.getElementById("headBreakCount"+sys);
+        const headOffline = document.getElementById("headOfflineCount"+sys);
+        if(headOnline) headOnline.innerText = onCount;
+        if(headBreak) headBreak.innerText = breakCount;
+        if(headOffline) headOffline.innerText = offCount;
 
         const sel = document.getElementById("agent"+sys);
         const keep = sel.value;
