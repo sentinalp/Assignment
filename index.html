@@ -1947,7 +1947,7 @@ body:not(.light-mode) .agent-card{
               </div>
               <div class="time-controls">
                 <div class="time-row">
-                  <span class="closing-label">เลิกงาน</span>
+                  <span class="closing-label">🚫 เลิกงาน</span>
                   <input id="endHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงเลิกงาน" value="${escapeHtml(time.hour)}" onchange="normalizeAgentEndTimeInputs('${timeId}')">
                   <input id="endMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีเลิกงาน" value="${escapeHtml(time.hour === "24" ? "00" : time.minute)}" ${time.hour === "24" ? "disabled" : ""} onchange="normalizeAgentEndTimeInputs('${timeId}')">
                   <button class="time-btn" onclick="saveAgentEndTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
@@ -1955,7 +1955,7 @@ body:not(.light-mode) .agent-card{
                   <span class="closing-chip">${endTimeText}</span>
                 </div>
                 <div class="time-row">
-                  <span class="closing-label">พักเบรก</span>
+                  <span class="closing-label">🍱 พักเบรก</span>
                   <input id="breakHour_${timeId}" class="end-time-field" list="hourOptions" inputmode="numeric" maxlength="2" placeholder="ชม." title="ชั่วโมงพักเบรก" value="${escapeHtml(breakAt.hour)}" onchange="normalizeAgentBreakTimeInputs('${timeId}')">
                   <input id="breakMinute_${timeId}" class="end-time-field" list="minuteOptions" inputmode="numeric" maxlength="2" placeholder="นาที" title="นาทีพักเบรก" value="${escapeHtml(breakAt.hour === "24" ? "00" : breakAt.minute)}" ${breakAt.hour === "24" ? "disabled" : ""} onchange="normalizeAgentBreakTimeInputs('${timeId}')">
                   <button class="time-btn" onclick="saveAgentBreakTime('${encodeURIComponent(a.id)}','${sys}','${timeId}')">บันทึก</button>
