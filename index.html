@@ -306,6 +306,38 @@
       font-size:13px;
     }
 
+    .break-alert{
+      margin:12px 18px 0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(245,158,11,.38);
+      background:linear-gradient(145deg,rgba(251,191,36,.24),rgba(239,68,68,.16));
+      color:#fff7ed;
+      box-shadow:var(--shadow-inset);
+    }
+
+    .break-alert-track{
+      width:max-content;
+      min-width:100%;
+      padding:9px 14px;
+      white-space:nowrap;
+      font-size:14px;
+      font-weight:1000;
+      animation:breakMarquee 18s linear infinite;
+      text-shadow:0 1px 12px rgba(0,0,0,.28);
+    }
+
+    body.light-mode .break-alert{
+      background:linear-gradient(145deg,rgba(255,247,237,.96),rgba(254,226,226,.92));
+      color:#9a3412;
+      border-color:rgba(245,158,11,.42);
+    }
+
+    @keyframes breakMarquee{
+      0%{transform:translateX(100%)}
+      100%{transform:translateX(-100%)}
+    }
+
     .section{
       padding:14px 18px;
       //border-top:1px solid rgba(255,255,255,.08);
@@ -1464,6 +1496,10 @@ body:not(.light-mode) .agent-card{
                 <div id="nextKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
               </div>
 
+              <div id="breakAlertKFC" class="break-alert" style="display:none">
+                <div id="breakAlertTextKFC" class="break-alert-track"></div>
+              </div>
+
               <div class="section">
                 <div class="section-title">📢 งานล่าสุด</div>
                 <div id="queueKFC"></div>
@@ -1515,6 +1551,10 @@ body:not(.light-mode) .agent-card{
                 <select id="agentNONKFC"><option value="">Auto</option></select>
                 <button class="send-btn" onclick="send('NONKFC')">ส่งงาน</button>
                 <div id="nextNONKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
+              </div>
+
+              <div id="breakAlertNONKFC" class="break-alert" style="display:none">
+                <div id="breakAlertTextNONKFC" class="break-alert-track"></div>
               </div>
 
               <div class="section">
@@ -1754,6 +1794,51 @@ body:not(.light-mode) .agent-card{
       if(!cleanHour) return "";
       const cleanMinute = normalizeMinute(minute,cleanHour);
       return `${cleanHour}:${cleanMinute}`;
+    }
+
+    function parseCompactTimeToMinutes(value){
+      const match = String(value || "").trim().match(/^(\d{1,2}):(\d{2})$/);
+      if(!match) return null;
+      const hour = Number(match[1]);
+      const minute = Number(match[2]);
+      if(hour === 24 && minute === 0) return 24 * 60;
+      if(hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+      return hour * 60 + minute;
+    }
+
+    function workdayMinutes(minutes){
+      return minutes < 5 * 60 ? minutes + 24 * 60 : minutes;
+    }
+
+    function currentWorkdayMinutes(){
+      const now = new Date();
+      return workdayMinutes(now.getHours() * 60 + now.getMinutes());
+    }
+
+    function renderBreakAlert(sys,rows){
+      const alertBox = document.getElementById("breakAlert" + sys);
+      const alertText = document.getElementById("breakAlertText" + sys);
+      if(!alertBox || !alertText) return;
+
+      const nowMinutes = currentWorkdayMinutes();
+      const overdue = (rows || [])
+        .filter(agent=>String(agent.status || "").toUpperCase() === "BREAK")
+        .filter(agent=>{
+          const breakMinutes = parseCompactTimeToMinutes(agent.breakTime);
+          if(breakMinutes === null) return false;
+          return nowMinutes >= workdayMinutes(breakMinutes) + 60;
+        });
+
+      if(!overdue.length){
+        alertBox.style.display = "none";
+        alertText.innerHTML = "";
+        return;
+      }
+
+      alertBox.style.display = "";
+      alertText.innerHTML = overdue.map(agent=>
+        `⚠️ ${escapeHtml(agent.name)} พักเบรกครบ 1 ชั่วโมงแล้ว`
+      ).join("   •   ");
     }
 
     function renderTimeDatalists(){
@@ -2172,6 +2257,7 @@ body:not(.light-mode) .agent-card{
           .sort((a,b)=>Number(a.queueNo || 9999) - Number(b.queueNo || 9999));
         const breakRows = rows.filter(a=>a.status === "BREAK");
         const offlineRows = rows.filter(a=>a.status !== "ONLINE" && a.status !== "BREAK");
+        renderBreakAlert(sys, rows);
 
         onlineRows.forEach(a=>{on += renderAgentCard(a,sys); onCount++});
         breakRows.forEach(a=>{breakHtml += renderAgentCard(a,sys); breakCount++});
