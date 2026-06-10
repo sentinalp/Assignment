@@ -1942,7 +1942,8 @@ body:not(.light-mode) .agent-card{
     }
 
     function showPage(pageId){
-      if(pageId === "adminPage" && currentGroup() !== "admin"){
+      const adminOnly = ["adminPage","reportPage","historyPage"];
+      if(adminOnly.includes(pageId) && currentGroup() !== "admin"){
         alert("เฉพาะ Group admin เท่านั้นที่เข้าใช้งานหน้านี้ได้");
         return;
       }
@@ -1995,7 +1996,10 @@ body:not(.light-mode) .agent-card{
       applyTheme();
       initReportDate();
       document.getElementById("currentUserLabel").innerText = `${currentUser()} (${currentGroup()})`;
-      document.querySelector('[data-page="adminPage"]').style.display = currentGroup() === "admin" ? "" : "none";
+      const isAdmin = currentGroup() === "admin";
+      document.querySelector('[data-page="adminPage"]').style.display = isAdmin ? "" : "none";
+      document.querySelector('[data-page="reportPage"]').style.display = isAdmin ? "" : "none";
+      document.querySelector('[data-page="historyPage"]').style.display = isAdmin ? "" : "none";
       showPage("assignPage");
       loadAll();
     }
