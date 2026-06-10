@@ -113,7 +113,16 @@
     assertReady();
     const { data, error } = await db
       .from("agents")
-      .select("*")
+      .select(`
+   	 id,
+   	 name,
+   	 status,
+   	 note,
+    	end_time,
+    	break_time,
+    	full_name,
+    	position
+  `)
       .eq("system", system)
       .order("position", { ascending: true })
       .order("name", { ascending: true });
@@ -389,7 +398,6 @@
   async function assignTicket(ticket, system, manualAgentId, user) {
     assertReady();
     if (!ticket) return { ok: false, message: "No ticket" };
-    await cleanupOldQueueHistory();
     await applyEndTimeCutoff(system);
 
     const agents = await getAgents(system);
@@ -519,10 +527,12 @@
     await Promise.all(SYSTEMS.map(async (system) => {
       const { data, error } = await db
         .from("queue")
-        .select("id, ticket, agent_id, agent_name, assigned_at, mode, assigned_by")
-        .eq("system", system)
-        .gte("assigned_at", `${dateKey}T00:00:00+07:00`)
-        .lt("assigned_at", `${dateKey}T23:59:59.999+07:00`);
+	.select("id, ticket, agent_id, agent_name, assigned_at, mode, assigned_by")
+	.eq("system", system)
+	.gte("assigned_at", `${dateKey}T00:00:00+07:00`)
+	.lt("assigned_at", `${dateKey}T23:59:59.999+07:00`)
+	.order("assigned_at", { ascending: false })
+	.limit(200)
       if (error) throw error;
 
       (data || []).forEach((row) => {
