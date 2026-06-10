@@ -1376,6 +1376,57 @@ body.light-mode .copy-toast{
   background:#0b56ad;
 }
 
+body.light-mode .small-text,
+body.light-mode .note,
+body.light-mode .popup-detail,
+body.light-mode .field label,
+body.light-mode .bar-label,
+body.light-mode .history-total,
+body.light-mode .closing-label,
+body.light-mode .queue-item,
+body.light-mode .history-row,
+body.light-mode .summary-row,
+body.light-mode .empty-state{
+  color:#1e3a5f;
+}
+
+body.light-mode .agent-card .note-btn,
+body.light-mode .agent-card .break-btn,
+body.light-mode .agent-card .time-btn,
+body.light-mode .admin-card .secondary-btn,
+body.light-mode .admin-card .note-btn,
+body.light-mode .report-card .secondary-btn{
+  background:#e7f2ff;
+  color:#12335f;
+  border-color:#cfe5ff;
+}
+
+body.light-mode .agent-card .break-btn.active{
+  background:#fff4db;
+  color:#8a4b00;
+  border-color:#ffd88a;
+}
+
+body.light-mode .queue-item .small-text,
+body.light-mode .history-row .small-text,
+body.light-mode .agent-card .small-text{
+  color:#365f8e;
+}
+
+body.light-mode .bar-count,
+body.light-mode .head-status-count{
+  color:#12335f;
+}
+
+body.light-mode .head-status-label{
+  color:#1e3a5f;
+}
+
+body.light-mode .head-status-item{
+  background:#ffffff;
+  border-color:#d8e7f6;
+}
+
 /* Dark mode */
 body:not(.light-mode) .agent-card{
   background: linear-gradient(145deg, #1e293b, #111827);
@@ -2631,7 +2682,7 @@ body:not(.light-mode) .agent-card{
         autoRefresh();
         if(document.getElementById("reportPage").classList.contains("active")) loadReport();
       }
-    },4000);
+    },60000);
   </script>
 </body>
 </html>
