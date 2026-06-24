@@ -120,6 +120,7 @@
    	 note,
     	end_time,
     	break_time,
+    	start_time,
     	full_name,
     	position
   `)
@@ -194,6 +195,23 @@
       .map((agent) => agent.id)
       .filter((id) => !offlineUpdates.includes(id));
 
+    const onlineUpdates = agents
+      .filter((agent) => {
+        const status = String(agent.status).toUpperCase();
+        
+        // Auto ONLINE from scheduled start_time
+        const startMinutes = parseTimeToMinutes(agent.start_time);
+        const isScheduledOnline = status !== "ONLINE" && startMinutes !== null && nowMinutes >= toWorkdayMinutes(startMinutes);
+
+        // Auto ONLINE when break exceeds 1 hour
+        const breakMinutes = parseTimeToMinutes(agent.break_time);
+        const isOverdueBreak = status === "BREAK" && breakMinutes !== null && nowMinutes >= toWorkdayMinutes(breakMinutes) + 60;
+
+        return isScheduledOnline || isOverdueBreak;
+      })
+      .map((agent) => agent.id)
+      .filter((id) => !offlineUpdates.includes(id) && !breakUpdates.includes(id));
+
     if (offlineUpdates.length) {
       const { error } = await db
         .from("agents")
@@ -210,6 +228,20 @@
         .eq("system", system)
         .in("id", breakUpdates);
       if (error) throw error;
+    }
+
+    if (onlineUpdates.length) {
+      const { error } = await db
+        .from("agents")
+        .update({ status: "ONLINE", start_time: "", break_time: "", updated_at: new Date().toISOString() })
+        .eq("system", system)
+        .in("id", onlineUpdates);
+      if (error) throw error;
+      
+      // Move them to next queue
+      for (const id of onlineUpdates) {
+        await moveAgentToNextQueue(system, id);
+      }
     }
   }
 
@@ -241,6 +273,7 @@
       note: row.note || "",
       endTime: formatEndTime(row.end_time),
       breakTime: formatEndTime(row.break_time),
+      startTime: formatEndTime(row.start_time),
       fullName: row.full_name || "",
       todayCount: counts[String(row.name || "").trim()] || 0
     }));
@@ -269,6 +302,7 @@
       note: row.note || "",
       end_time: row.end_time || "",
       break_time: row.break_time || "",
+      start_time: row.start_time || "",
       full_name: row.full_name || "",
       position: index + 1,
       updated_at: new Date().toISOString()
@@ -381,6 +415,21 @@
     const { error } = await db
       .from("agents")
       .update({ break_time: cleanBreakTime, updated_at: new Date().toISOString() })
+      .eq("system", system)
+      .eq("id", id);
+    if (error) throw error;
+    await applyEndTimeCutoff(system);
+    return "OK";
+  }
+
+  async function updateAgentStartTime(id, startTime, system) {
+    const cleanStartTime = formatEndTime(startTime);
+    if (cleanStartTime && parseTimeToMinutes(cleanStartTime) === null) {
+      throw new Error("Invalid start time");
+    }
+    const { error } = await db
+      .from("agents")
+      .update({ start_time: cleanStartTime, updated_at: new Date().toISOString() })
       .eq("system", system)
       .eq("id", id);
     if (error) throw error;
@@ -593,6 +642,7 @@
       note: agent.note || "",
       end_time: endTime,
       break_time: breakTime,
+      start_time: formatEndTime(agent.startTime || ""),
       full_name: agent.fullName || current?.full_name || "",
       position: current?.position || rows.length + 1,
       updated_at: new Date().toISOString()
@@ -653,6 +703,7 @@
     updateAgentNote,
     updateAgentEndTime,
     updateAgentBreakTime,
+    updateAgentStartTime,
     getNextInQueue,
     assignTicket,
     getLastQueue,
