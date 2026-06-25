@@ -205,7 +205,7 @@
         const breakMinutes = parseTimeToMinutes(agent.break_time);
         
         let isScheduledOnline = false;
-        if (status !== "ONLINE" && startMinutes !== null) {
+        if (status === "OFFLINE" && startMinutes !== null) {
           if (breakMinutes !== null) {
             // Prioritize break: if start_time is before or equal to break_time, don't trigger during break period
             if (toWorkdayMinutes(startMinutes) > toWorkdayMinutes(breakMinutes)) {
