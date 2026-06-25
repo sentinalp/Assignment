@@ -189,7 +189,8 @@
     const breakUpdates = agents
       .filter((agent) => {
         const breakMinutes = parseTimeToMinutes(agent.break_time);
-        if (String(agent.status).toUpperCase() !== "ONLINE" || breakMinutes === null) return false;
+        const status = String(agent.status).toUpperCase();
+        if (status === "BREAK" || breakMinutes === null) return false;
         return nowMinutes >= toWorkdayMinutes(breakMinutes) - BREAK_BEFORE_START_MINUTES;
       })
       .map((agent) => agent.id)
@@ -201,10 +202,24 @@
         
         // Auto ONLINE from scheduled start_time
         const startMinutes = parseTimeToMinutes(agent.start_time);
-        const isScheduledOnline = status !== "ONLINE" && startMinutes !== null && nowMinutes >= toWorkdayMinutes(startMinutes);
+        const breakMinutes = parseTimeToMinutes(agent.break_time);
+        
+        let isScheduledOnline = false;
+        if (status !== "ONLINE" && startMinutes !== null) {
+          if (breakMinutes !== null) {
+            // Prioritize break: if start_time is before or equal to break_time, don't trigger during break period
+            if (toWorkdayMinutes(startMinutes) > toWorkdayMinutes(breakMinutes)) {
+              isScheduledOnline = nowMinutes >= toWorkdayMinutes(startMinutes);
+            } else {
+              const inBreakPeriod = nowMinutes >= toWorkdayMinutes(breakMinutes) - BREAK_BEFORE_START_MINUTES && nowMinutes < toWorkdayMinutes(breakMinutes) + 60;
+              isScheduledOnline = nowMinutes >= toWorkdayMinutes(startMinutes) && !inBreakPeriod;
+            }
+          } else {
+            isScheduledOnline = nowMinutes >= toWorkdayMinutes(startMinutes);
+          }
+        }
 
         // Auto ONLINE when break exceeds 1 hour
-        const breakMinutes = parseTimeToMinutes(agent.break_time);
         const isOverdueBreak = status === "BREAK" && breakMinutes !== null && nowMinutes >= toWorkdayMinutes(breakMinutes) + 60;
 
         return isScheduledOnline || isOverdueBreak;
