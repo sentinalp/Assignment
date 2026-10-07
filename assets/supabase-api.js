@@ -195,9 +195,9 @@
     return index < 0 ? agents[0] : agents[(index + 1) % agents.length];
   }
 
-  async function applyEndTimeCutoff(system) {
+  async function applyEndTimeCutoff(system, existingAgents = null) {
     await resetEndTimesIfNeeded();
-    const agents = await orderedAgents(system);
+    const agents = existingAgents || await orderedAgents(system);
     const nowMinutes = toWorkdayMinutes(getThailandMinutesOfDay());
     const offlineUpdates = agents
       .filter((agent) => {
@@ -279,6 +279,8 @@
         await moveAgentToNextQueue(system, id);
       }
     }
+
+    return Boolean(offlineUpdates.length || breakUpdates.length || onlineUpdates.length);
   }
 
   async function getAssignmentCountsByAgent(system, reportDate) {
@@ -299,8 +301,9 @@
   }
 
   async function getAgents(system) {
-    await applyEndTimeCutoff(system);
-    const rows = await orderedAgents(system);
+    let rows = await orderedAgents(system);
+    const cutoffChanged = await applyEndTimeCutoff(system, rows);
+    if (cutoffChanged) rows = await orderedAgents(system);
     const counts = await getAssignmentCountsByAgent(system);
     const agents = rows.map((row) => ({
       id: row.id,
@@ -854,10 +857,10 @@
     if (!db?.channel || typeof onChange !== "function") return null;
     return db
       .channel("work-assignment-lite-sync")
-      .on("postgres_changes", { event: "*", schema: "public", table: "agents" }, () => onChange("agents"))
-      .on("postgres_changes", { event: "*", schema: "public", table: "queue" }, () => onChange("queue"))
-      .on("postgres_changes", { event: "*", schema: "public", table: "user_presence" }, () => onChange("user_presence"))
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "activity_logs" }, () => onChange("activity_logs"))
+      .on("postgres_changes", { event: "*", schema: "public", table: "agents" }, (payload) => onChange("agents", payload))
+      .on("postgres_changes", { event: "*", schema: "public", table: "queue" }, (payload) => onChange("queue", payload))
+      .on("postgres_changes", { event: "*", schema: "public", table: "user_presence" }, (payload) => onChange("user_presence", payload))
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "activity_logs" }, (payload) => onChange("activity_logs", payload))
       .subscribe();
   }
 
