@@ -1410,6 +1410,385 @@ body.light-mode .head-status-item{
 body:not(.light-mode) .agent-card{
   background: linear-gradient(145deg, #1e293b, #111827);
 }
+
+/* 2026 refresh: calm operational palette, clearer spacing, and denser admin controls */
+:root{
+  --bg:#07111f;
+  --bg2:#102235;
+  --panel:#10243a;
+  --panel2:#153453;
+  --line:#28435f;
+  --ink:#eef7ff;
+  --muted:#93aec8;
+  --brand:#38bdf8;
+  --brand2:#14b8a6;
+  --shadow:0 20px 46px rgba(2,8,23,.32);
+  --radius:10px;
+}
+
+body{
+  background:
+    linear-gradient(145deg,rgba(7,17,31,.96),rgba(13,32,52,.96) 54%,rgba(7,24,35,.96)),
+    #07111f;
+}
+
+.brand-mark{border-radius:10px;background:linear-gradient(135deg,#38bdf8,#14b8a6)}
+.tab{border-radius:10px}
+.tab:hover,.tab.active{background:rgba(56,189,248,.18);border-color:rgba(56,189,248,.34)}
+.panel,.system-panel,.report-card,.admin-card{border-radius:12px}
+.system-head,.admin-head,.report-head{background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(20,184,166,.10))}
+.primary-btn,.send-btn,.btn-ok{background:linear-gradient(135deg,#0ea5e9,#14b8a6)}
+.queue-item.latest{border-left-color:#14b8a6}
+.top-actions{flex-wrap:wrap;justify-content:flex-end}
+
+.active-users{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  max-width:360px;
+  padding:7px 10px;
+  border:1px solid rgba(56,189,248,.22);
+  border-radius:999px;
+  background:rgba(15,23,42,.38);
+  color:var(--ink);
+  font-size:12px;
+  font-weight:800;
+}
+
+.active-users span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.menu-permissions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(15,23,42,.24);
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:36px;
+  padding:7px 9px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+  color:var(--ink);
+  font-size:13px;
+  font-weight:800;
+}
+
+.check-row input{
+  width:16px;
+  min-height:16px;
+  accent-color:#14b8a6;
+}
+
+.log-toolbar{
+  display:grid;
+  grid-template-columns:minmax(240px,1fr) auto auto;
+  gap:12px;
+  align-items:end;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.log-row{
+  display:grid;
+  grid-template-columns:170px 130px 150px 1fr;
+  gap:12px;
+  align-items:center;
+  font-size:13px;
+  line-height:1.35;
+}
+
+.log-action{
+  display:inline-flex;
+  width:max-content;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(20,184,166,.14);
+  color:#7dd3fc;
+  font-size:12px;
+  font-weight:800;
+}
+
+.log-row .small-text,
+.log-row .history-time{
+  font-size:11px;
+}
+
+.log-pager{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  padding:12px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+
+.log-pager button:disabled{
+  cursor:not-allowed;
+  opacity:.45;
+}
+
+body.light-mode{
+  --bg:#eef7fb;
+  --bg2:#f8fbff;
+  --panel:#ffffff;
+  --panel2:#eef7fb;
+  --line:#d7e7f1;
+  --ink:#123047;
+  --muted:#567187;
+}
+
+body.light-mode .active-users,
+body.light-mode .menu-permissions,
+body.light-mode .check-row{
+  background:#ffffff;
+  border-color:#d7e7f1;
+  color:#123047;
+}
+
+body.light-mode .log-action{
+  background:#dff8f4;
+  color:#087e8b;
+}
+
+/* Formal 2026 operations palette */
+:root{
+  --bg:#0b1220;
+  --bg2:#111827;
+  --panel:#121c2c;
+  --panel2:#182536;
+  --line:#2b3a4f;
+  --ink:#f3f6fb;
+  --muted:#9aa8ba;
+  --brand:#4f8fb8;
+  --brand2:#4fa39a;
+  --accent:#c9a45c;
+  --danger:#c75c68;
+  --shadow:0 22px 54px rgba(2,6,23,.34);
+}
+
+body{
+  background:
+    linear-gradient(145deg,#09111f 0%,#111827 48%,#0f1d29 100%);
+}
+
+.app{max-width:1680px;margin:0 auto}
+.topbar{
+  display:grid;
+  grid-template-columns:minmax(320px,1.1fr) minmax(360px,1.3fr) auto;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  background:rgba(8,19,28,.84);
+}
+
+.brand{min-width:0}
+.brand-copy{min-width:0}
+.brand-heading-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.brand h1{font-size:22px}
+.brand p{font-size:13px}
+.brand-mark{
+  width:82px;
+  border-radius:8px;
+  background:linear-gradient(135deg,#4f8fb8,#4fa39a);
+  color:#f8fbff;
+}
+.active-users{
+  max-width:300px;
+  background:rgba(79,143,184,.12);
+  border-color:rgba(115,151,184,.30);
+  color:#e8f1f7;
+}
+.tabs{
+  justify-content:center;
+  padding:6px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+}
+.tab{
+  min-height:38px;
+  border-radius:10px;
+  padding:8px 12px;
+}
+.tab:hover,.tab.active{
+  background:linear-gradient(135deg,rgba(79,143,184,.24),rgba(79,163,154,.16));
+  color:#fff;
+}
+.top-actions{justify-content:flex-end}
+.assignment-grid{
+  grid-template-columns:repeat(2,minmax(520px,1fr));
+  align-items:start;
+}
+.system-panel,.report-card,.admin-card,.panel{
+  background:linear-gradient(180deg,rgba(18,28,44,.97),rgba(13,24,38,.97));
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:14px;
+}
+.system-head,.admin-head,.report-head{
+  background:linear-gradient(135deg,rgba(79,143,184,.15),rgba(201,164,92,.08));
+}
+.head-status-summary{min-width:230px}
+.ticket-row{
+  grid-template-columns:minmax(160px,1fr) minmax(160px,1fr) auto;
+  padding:18px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.025);
+}
+.ticket-row .next-inline{
+  grid-column:1 / -1;
+}
+.system-tools{
+  display:grid;
+  grid-template-columns:minmax(180px,1fr) auto;
+  gap:10px;
+  padding:14px 18px 0;
+}
+.system-tools input{
+  min-height:42px;
+  background:#f8fbff;
+  color:#172233;
+  border:1px solid #b9c9d8;
+  box-shadow:0 8px 18px rgba(2,6,23,.16);
+}
+.system-tools input::placeholder{color:#66768a}
+.system-tools input:focus{
+  border-color:#4f8fb8;
+  box-shadow:0 0 0 4px rgba(79,143,184,.22),0 10px 22px rgba(2,6,23,.18);
+}
+.system-tools .secondary-btn{
+  background:rgba(248,251,255,.12);
+  border-color:rgba(185,201,216,.34);
+  color:#e8eef6;
+}
+.section{
+  padding:14px 18px 4px;
+}
+.section-title{
+  background:transparent;
+  border:0;
+  padding:0;
+  margin-bottom:10px;
+  color:#e8eef6;
+}
+.agent-card,.queue-item,.data-row,.summary-row,.empty-state,.history-row{
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:none;
+}
+.agent-card{
+  padding:13px;
+}
+.agent-mainline{
+  display:grid;
+  gap:7px;
+}
+.primary-btn,.send-btn,.btn-ok{
+  background:linear-gradient(135deg,#4f8fb8,#4fa39a);
+  color:#ffffff;
+}
+.danger-btn,.btn-cancel{background:#c75c68}
+.queue-board-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.queue-monitor-card{overflow:hidden}
+.queue-monitor-head{
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+  background:linear-gradient(135deg,rgba(79,143,184,.15),rgba(201,164,92,.09));
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.queue-monitor-body{padding:16px}
+.readonly-agent{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:center;
+}
+.readonly-agent .small-text{margin-top:4px}
+.queue-monitor-tools{
+  display:grid;
+  grid-template-columns:minmax(180px,1fr) auto;
+  gap:10px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+body.light-mode{
+  --bg:#f3f6f9;
+  --bg2:#ffffff;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#d9e2ec;
+  --ink:#172233;
+  --muted:#66768a;
+}
+body.light-mode{
+  background:linear-gradient(145deg,#edf2f7 0%,#ffffff 50%,#f2f6f7 100%);
+}
+body.light-mode .topbar{
+  background:rgba(255,255,255,.86);
+  border-bottom-color:#d9ecef;
+}
+body.light-mode .system-panel,
+body.light-mode .report-card,
+body.light-mode .admin-card,
+body.light-mode .panel{
+  background:#ffffff;
+  border-color:#d9ecef;
+}
+body.light-mode .system-head,
+body.light-mode .admin-head,
+body.light-mode .report-head,
+body.light-mode .queue-monitor-head{
+  background:#f4f7fa;
+}
+body.light-mode .section-title{color:#12323b}
+body.light-mode .active-users{
+  background:#eef5f8;
+  border-color:#d4e3eb;
+  color:#172233;
+}
+body.light-mode .tabs{background:#f6f8fb;border-color:#d9e2ec}
+body.light-mode .system-tools input{
+  background:#ffffff;
+  border-color:#b9c9d8;
+  box-shadow:0 8px 20px rgba(23,34,51,.10);
+}
+body.light-mode .system-tools .secondary-btn{
+  background:#eef3f8;
+  border-color:#d9e2ec;
+  color:#172233;
+}
+
+@media (max-width:1180px){
+  .topbar{grid-template-columns:1fr;align-items:flex-start}
+  .assignment-grid,.queue-board-grid{grid-template-columns:1fr}
+}
+
     @keyframes spin{to{transform:rotate(360deg)}}
 
     @media (max-width:1000px){
@@ -1431,6 +1810,7 @@ body:not(.light-mode) .agent-card{
       .history-header{display:none}
       .agent-card{align-items:flex-start;flex-direction:column}
       .agent-actions{justify-content:flex-start}
+      .log-toolbar,.log-row,.menu-permissions{grid-template-columns:1fr}
     }
 /* Removed old offline/online soft color override to prevent double overriding */
   </style>
@@ -1441,7 +1821,7 @@ body:not(.light-mode) .agent-card{
     <div class="login-card">
       <div class="login-visual">
         <h1>ระบบมอบหมายงาน</h1>
-        <p>จัดคิวงาน ติดตามรายงาน และดูแลผู้ใช้งานในหน้าจอเดียว</p>
+        <p>จัดคิวงาน ดูสถานะทีม และติดตามกิจกรรมล่าสุดในหน้าจอเดียว</p>
       </div>
 
       <div class="login-form">
@@ -1462,16 +1842,22 @@ body:not(.light-mode) .agent-card{
       <header class="topbar">
         <div class="brand">
           <div class="brand-mark">ALLSYS</div>
-          <div>
-            <h1 id="pageHeading">ระบบมอบหมายงาน</h1>
+          <div class="brand-copy">
+            <div class="brand-heading-row">
+              <h1 id="pageHeading">ระบบมอบหมายงาน</h1>
+              <div id="activeUsers" class="active-users" title="ผู้ใช้งานที่มีกิจกรรมใน 5 นาทีล่าสุด">
+                <strong>ใช้งานอยู่</strong>
+                <span>กำลังโหลด...</span>
+              </div>
+            </div>
             <p id="pageSubheading">จัดคิวและติดตามสถานะทีม</p>
           </div>
         </div>
 
         <nav class="tabs" aria-label="เมนูหลัก">
           <button class="tab active" data-page="assignPage" onclick="showPage('assignPage')">ระบบมอบหมายงาน</button>
-          <button class="tab" data-page="reportPage" onclick="showPage('reportPage')">หน้ารายงาน</button>
-          <button class="tab" data-page="historyPage" onclick="showPage('historyPage')">ประวัติการส่งงาน</button>
+          <button class="tab" data-page="queuePage" onclick="showPage('queuePage')">ดูคิวงาน</button>
+          <button class="tab" data-page="logPage" onclick="showPage('logPage')">บันทึก Log</button>
           <button class="tab" data-page="adminPage" onclick="showPage('adminPage')">หน้าจัดการ Admin</button>
         </nav>
 
@@ -1518,12 +1904,15 @@ body:not(.light-mode) .agent-card{
                 <div id="nextKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
               </div>
 
-
-
               <div class="section">
                 <div class="section-title">📢 งานล่าสุด</div>
                 <div id="queueKFC"></div>
                 <button class="danger-btn" style="margin-top:10px" onclick="deleteLast('KFC')">❌ ยกเลิกงานล่าสุด KFC</button>
+              </div>
+
+              <div class="system-tools">
+                <input id="agentSearchKFC" placeholder="ค้นหาเจ้าหน้าที่ KFC" oninput="filterAgents('KFC')">
+                <button class="secondary-btn" onclick="clearAgentSearch('KFC')">ล้างค้นหา</button>
               </div>
 
               <div class="section">
@@ -1543,7 +1932,7 @@ body:not(.light-mode) .agent-card{
             <section class="system-panel">
               <div class="system-head">
                 <div class="system-title-row">
-                  <img class="system-logo" src="https://www.terminal21.co.th/pattaya/wp-content/uploads/mister-donut.jpg" alt="CRG logo">
+                  <img class="system-logo" src="https://career.crg.co.th/images/logo.png" alt="CRG logo">
                   <div>
                     <span class="tag">NONKFC</span>
                     <h2>มอบหมายงาน NONKFC</h2>
@@ -1573,12 +1962,15 @@ body:not(.light-mode) .agent-card{
                 <div id="nextNONKFC" class="next-inline">กำลังโหลดลำดับถัดไป...</div>
               </div>
 
-
-
               <div class="section">
                 <div class="section-title">🌟งานล่าสุด</div>
                 <div id="queueNONKFC"></div>
                 <button class="danger-btn" style="margin-top:10px" onclick="deleteLast('NONKFC')">❌ ยกเลิกงานล่าสุด NONKFC</button>
+              </div>
+
+              <div class="system-tools">
+                <input id="agentSearchNONKFC" placeholder="ค้นหาเจ้าหน้าที่ NONKFC" oninput="filterAgents('NONKFC')">
+                <button class="secondary-btn" onclick="clearAgentSearch('NONKFC')">ล้างค้นหา</button>
               </div>
 
               <div class="section">
@@ -1597,81 +1989,70 @@ body:not(.light-mode) .agent-card{
           </div>
         </section>
 
-        <section id="reportPage" class="page">
-          <div class="report-toolbar panel">
-            <div class="field">
-              <label for="reportDate">&#128197; Report date</label>
-              <input id="reportDate" type="date" onchange="loadReport()">
-            </div>
-            <button class="primary-btn" onclick="loadReport()">&#128202; Refresh report</button>
+        <section id="queuePage" class="page">
+          <div class="queue-monitor-tools panel">
+            <input id="queueSearch" placeholder="ค้นหาเจ้าหน้าที่หรือ Ticket" oninput="renderQueueMonitor()">
+            <button class="secondary-btn" onclick="clearQueueSearch()">ล้างค้นหา</button>
           </div>
-
-          <div class="report-grid">
-            <section class="report-card">
-              <div class="report-head">
+          <div class="queue-board-grid">
+            <section class="report-card queue-monitor-card">
+              <div class="queue-monitor-head">
                 <div>
-                  <span class="tag">&#127831; KFC</span>
-                  <h2>Hourly assignment chart</h2>
-                  <div id="reportTotalKFC" class="small-text">Total 0 jobs</div>
+                  <span class="tag">KFC</span>
+                  <h2>คิว KFC</h2>
+                  <div class="small-text">ดูคิวและสถานะเท่านั้น ไม่สามารถปรับสถานะจากหน้านี้</div>
                 </div>
+                <div id="queuePageNextKFC" class="next-inline">กำลังโหลด...</div>
               </div>
-              <div id="hourlyKFC" class="chart"></div>
-              <div class="admin-section">
-                <div class="section-title">&#128100; Agent summary</div>
-                <div id="agentSummaryKFC" class="summary-list"></div>
-              </div>
-              <div class="admin-section">
-                <div class="section-title">User sent summary</div>
-                <div id="userSummaryKFC" class="summary-list"></div>
+              <div class="queue-monitor-body">
+                <div class="section-title">งานล่าสุด</div>
+                <div id="queuePageJobsKFC"></div>
+                <div class="section-title" style="margin-top:16px">เจ้าหน้าที่ Online ตามลำดับคิว</div>
+                <div id="queuePageAgentsKFC"></div>
               </div>
             </section>
 
-            <section class="report-card">
-              <div class="report-head">
+            <section class="report-card queue-monitor-card">
+              <div class="queue-monitor-head">
                 <div>
-                  <span class="tag">&#127849; NONKFC</span>
-                  <h2>Hourly assignment chart</h2>
-                  <div id="reportTotalNONKFC" class="small-text">Total 0 jobs</div>
+                  <span class="tag">NONKFC</span>
+                  <h2>คิว NONKFC</h2>
+                  <div class="small-text">ดูคิวและสถานะเท่านั้น ไม่สามารถปรับสถานะจากหน้านี้</div>
                 </div>
+                <div id="queuePageNextNONKFC" class="next-inline">กำลังโหลด...</div>
               </div>
-              <div id="hourlyNONKFC" class="chart"></div>
-              <div class="admin-section">
-                <div class="section-title">&#128100; Agent summary</div>
-                <div id="agentSummaryNONKFC" class="summary-list"></div>
-              </div>
-              <div class="admin-section">
-                <div class="section-title">User sent summary</div>
-                <div id="userSummaryNONKFC" class="summary-list"></div>
+              <div class="queue-monitor-body">
+                <div class="section-title">งานล่าสุด</div>
+                <div id="queuePageJobsNONKFC"></div>
+                <div class="section-title" style="margin-top:16px">เจ้าหน้าที่ Online ตามลำดับคิว</div>
+                <div id="queuePageAgentsNONKFC"></div>
               </div>
             </section>
           </div>
         </section>
 
-        <section id="historyPage" class="page">
-          <div class="report-toolbar panel">
+        <section id="logPage" class="page">
+          <div class="log-toolbar panel">
             <div class="field">
-              <label for="historyDate">&#128197; วันที่ส่งงาน</label>
-              <input id="historyDate" type="date" onchange="loadHistory()">
+              <label for="logSearch">ค้นหา Log</label>
+              <input id="logSearch" placeholder="ค้นหาจาก user, กิจกรรม, รายละเอียด" oninput="loadLogDebounced()">
             </div>
-            <div class="field">
-              <label for="historySearch">ค้นหาจาก Ticket หรือชื่อเจ้าหน้าที่</label>
-              <input id="historySearch" placeholder="เช่น INC12345 หรือชื่อเจ้าหน้าที่" oninput="loadHistoryDebounced()">
-            </div>
-            <button class="primary-btn" onclick="loadHistory()">ค้นหา</button>
-            <div id="historyTotal" class="history-total">พบ 0 รายการ</div>
+            <button class="primary-btn" onclick="loadLogs(true,true)">ค้นหา</button>
+            <div id="logTotal" class="history-total">แสดง 0 รายการ</div>
           </div>
 
           <section class="report-card">
             <div class="report-head">
               <div>
-                <span class="tag">History</span>
-                <h2>ประวัติการส่งงาน</h2>
-                <div class="small-text">รายการของวันที่เลือก เรียงจากรายการล่าสุดลงมา</div>
+                <span class="tag">Log</span>
+                <h2>บันทึกกิจกรรมผู้ใช้งาน</h2>
+                <div class="small-text">แสดงกิจกรรมล่าสุดทีละ 10 รายการ และเก็บเฉพาะช่วงเวลาล่าสุด</div>
               </div>
             </div>
-            <div id="historyList" class="history-list">
-              <div class="empty-state">กำลังโหลดประวัติการส่งงาน...</div>
+            <div id="logList" class="history-list">
+              <div class="empty-state">กำลังโหลด Log...</div>
             </div>
+            <div id="logPager" class="log-pager"></div>
           </section>
         </section>
 
@@ -1727,6 +2108,12 @@ body:not(.light-mode) .agent-card{
                     <option value="user">user</option>
                     <option value="admin">admin</option>
                   </select>
+                  <div class="menu-permissions" aria-label="สิทธิ์เมนู">
+                    <label class="check-row"><input type="checkbox" class="menu-check" value="assignPage" checked> ระบบมอบหมายงาน</label>
+                    <label class="check-row"><input type="checkbox" class="menu-check" value="queuePage"> ดูคิวงาน</label>
+                    <label class="check-row"><input type="checkbox" class="menu-check" value="logPage"> บันทึก Log</label>
+                    <label class="check-row"><input type="checkbox" class="menu-check" value="adminPage"> หน้าจัดการ Admin</label>
+                  </div>
                   <button class="primary-btn" onclick="saveAdminUser()">บันทึก User</button>
                 </div>
                 <div id="adminUsers"></div>
@@ -1745,16 +2132,29 @@ body:not(.light-mode) .agent-card{
     const SYSTEMS = ["KFC","NONKFC"];
     const PAGE_TEXT = {
       assignPage:["ระบบมอบหมายงาน","จัดคิวและติดตามสถานะทีม"],
-      reportPage:["หน้ารายงาน","สรุปจำนวนงานรายชั่วโมงและรายเจ้าหน้าที่"],
-      historyPage:["ประวัติการส่งงาน","ค้นหา Ticket หรือชื่อเจ้าหน้าที่ตามวันที่ส่งงาน"],
+      queuePage:["ดูคิวงาน","ดูคิว KFC และ NONKFC แบบอ่านอย่างเดียว"],
+      logPage:["บันทึก Log","ติดตามกิจกรรมผู้ใช้งานล่าสุด"],
       adminPage:["หน้าจัดการ Admin","จัดการเจ้าหน้าที่และผู้ใช้งาน"]
     };
+    const MENU_LABELS = {
+      assignPage:"ระบบมอบหมายงาน",
+      queuePage:"ดูคิวงาน",
+      logPage:"บันทึก Log",
+      adminPage:"หน้าจัดการ Admin"
+    };
+    const DEFAULT_MENU_PERMISSIONS = ["assignPage","queuePage"];
 
     let tempData = null;
     let tempSys = null;
     let adminAgentsCache = {};
-    let reportDateReady = false;
-    let historySearchTimer = null;
+    const agentCache = {};
+    const queueCache = {};
+    let logSearchTimer = null;
+    let logPageIndex = 0;
+    const LOG_PAGE_SIZE = 10;
+    let activityTimer = null;
+    let realtimeReady = false;
+    const lastLoads = {};
 
     function escapeHtml(value){
       return String(value ?? "")
@@ -1771,6 +2171,24 @@ body:not(.light-mode) .agent-card{
 
     function currentGroup(){
       return localStorage.getItem("group") || "user";
+    }
+
+    function currentMenuPermissions(){
+      try{
+        const value = JSON.parse(localStorage.getItem("menuPermissions") || "[]");
+        const list = Array.isArray(value) ? value : [];
+        const withDefault = list.includes("assignPage") ? list : ["assignPage",...list];
+        return currentGroup() === "admin"
+          ? Array.from(new Set([...withDefault,"queuePage","adminPage","logPage"]))
+          : Array.from(new Set(withDefault));
+      }catch(_err){
+        return currentGroup() === "admin" ? ["assignPage","queuePage","adminPage","logPage"] : DEFAULT_MENU_PERMISSIONS;
+      }
+    }
+
+    function canOpenPage(pageId){
+      if(pageId === "adminPage" && currentGroup() !== "admin") return false;
+      return currentMenuPermissions().includes(pageId);
     }
 
     function todayKey(){
@@ -1861,19 +2279,6 @@ body:not(.light-mode) .agent-card{
       refreshTimeInputs("adminAgentEndTime");
     }
 
-    function initReportDate(){
-      const input = document.getElementById("reportDate");
-      if(!input) return;
-      input.value = input.value || todayKey();
-      reportDateReady = true;
-    }
-
-    function initHistoryDate(){
-      const input = document.getElementById("historyDate");
-      if(!input) return;
-      input.value = input.value || todayKey();
-    }
-
     function applyTheme(theme){
       const mode = theme || localStorage.getItem("theme") || "dark";
       document.body.classList.toggle("light-mode", mode === "light");
@@ -1887,9 +2292,8 @@ body:not(.light-mode) .agent-card{
     }
 
     function showPage(pageId){
-      const adminOnly = ["adminPage","reportPage","historyPage"];
-      if(adminOnly.includes(pageId) && currentGroup() !== "admin"){
-        alert("เฉพาะ Group admin เท่านั้นที่เข้าใช้งานหน้านี้ได้");
+      if(!canOpenPage(pageId)){
+        alert("บัญชีนี้ยังไม่มีสิทธิ์เข้าใช้งานหน้านี้");
         return;
       }
 
@@ -1899,9 +2303,9 @@ body:not(.light-mode) .agent-card{
       document.getElementById("pageHeading").innerText = PAGE_TEXT[pageId]?.[0] || "";
       document.getElementById("pageSubheading").innerText = PAGE_TEXT[pageId]?.[1] || "";
 
-      if(pageId === "reportPage") loadReport();
-      if(pageId === "historyPage") loadHistory();
+      if(pageId === "logPage") loadLogs();
       if(pageId === "adminPage") loadAdmin();
+      if(pageId === "queuePage") loadQueuePage();
     }
 
     function login(){
@@ -1917,6 +2321,7 @@ body:not(.light-mode) .agent-card{
         if(res?.success === true){
           localStorage.setItem("user", res.user || u);
           localStorage.setItem("group", res.group || "user");
+          localStorage.setItem("menuPermissions", JSON.stringify(res.menuPermissions || DEFAULT_MENU_PERMISSIONS));
           localStorage.setItem("login", "true");
           localStorage.setItem("lastActive", Date.now());
           enterApp();
@@ -1927,10 +2332,14 @@ body:not(.light-mode) .agent-card{
     }
 
     function logout(){
+      const username = currentUser();
+      google.script.run.clearPresence(username);
       localStorage.removeItem("login");
       localStorage.removeItem("lastActive");
       localStorage.removeItem("user");
       localStorage.removeItem("group");
+      localStorage.removeItem("menuPermissions");
+      if(activityTimer) clearTimeout(activityTimer);
       document.getElementById("loginPage").style.display = "flex";
       document.getElementById("appPage").style.display = "none";
     }
@@ -1939,18 +2348,17 @@ body:not(.light-mode) .agent-card{
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("appPage").style.display = "block";
       applyTheme();
-      initReportDate();
       document.getElementById("currentUserLabel").innerText = `${currentUser()} (${currentGroup()})`;
-      const isAdmin = currentGroup() === "admin";
-      document.querySelector('[data-page="adminPage"]').style.display = isAdmin ? "" : "none";
-      document.querySelector('[data-page="reportPage"]').style.display = isAdmin ? "" : "none";
-      document.querySelector('[data-page="historyPage"]').style.display = isAdmin ? "" : "none";
+      applyMenuPermissions();
       showPage("assignPage");
       loadAll();
+      setupRealtime();
+      sendActivity("active","กำลังใช้งาน");
     }
 
     function resetIdle(){
       localStorage.setItem("lastActive", Date.now());
+      sendActivity("active","กำลังใช้งาน");
     }
 
     document.addEventListener("mousemove", resetIdle);
@@ -1961,6 +2369,69 @@ body:not(.light-mode) .agent-card{
       const last = Number(localStorage.getItem("lastActive") || Date.now());
       if(Date.now() - last > 24 * 60 * 60 * 1000) logout();
     },60000);
+
+    function applyMenuPermissions(){
+      const allowed = currentMenuPermissions();
+      document.querySelectorAll(".tab").forEach(tab=>{
+        const pageId = tab.dataset.page;
+        tab.style.display = canOpenPage(pageId) ? "" : "none";
+      });
+      const activePage = document.querySelector(".page.active")?.id;
+      if(activePage && !allowed.includes(activePage)) showPage("assignPage");
+    }
+
+    function sendActivity(action="active",detail=""){
+      if(localStorage.getItem("login") !== "true") return;
+      if(action === "active"){
+        const now = Date.now();
+        if(now - Number(localStorage.getItem("lastPresenceSent") || 0) < 60000) return;
+        localStorage.setItem("lastPresenceSent", now);
+      }
+      google.script.run
+        .withSuccessHandler(()=>loadActiveUsers())
+        .touchPresence(currentUser(),action,detail);
+    }
+
+    function loadActiveUsers(){
+      if(localStorage.getItem("login") !== "true") return;
+      google.script.run.withSuccessHandler(users=>{
+        const names = (users || []).map(u=>u.username).filter(Boolean);
+        const target = document.getElementById("activeUsers");
+        if(!target) return;
+        target.querySelector("span").innerText = names.length ? names.join(", ") : "ไม่มีผู้ใช้งานล่าสุด";
+      }).getActiveUsers();
+    }
+
+    function logActivity(action,detail=""){
+      google.script.run.logUserActivity(currentUser(),action,detail);
+    }
+
+    function setupRealtime(){
+      if(realtimeReady || !window.WorkAssignmentApi?.subscribeToChanges) return;
+      realtimeReady = true;
+      window.WorkAssignmentApi.subscribeToChanges((table)=>{
+        if(table === "agents"){
+          SYSTEMS.forEach(sys=>loadAgents(sys,true));
+        }
+        if(table === "queue"){
+          SYSTEMS.forEach(sys=>loadAgents(sys,true));
+          SYSTEMS.forEach(sys=>loadQueue(sys,true));
+        }
+        if(table === "user_presence") loadActiveUsers();
+        if(table === "activity_logs" && document.getElementById("logPage")?.classList.contains("active")) loadLogs(true);
+      });
+    }
+
+    function shouldLoad(key,force=false,ttl=45000){
+      const now = Date.now();
+      if(force){
+        lastLoads[key] = now;
+        return true;
+      }
+      if(now - (lastLoads[key] || 0) < ttl) return false;
+      lastLoads[key] = now;
+      return true;
+    }
 
     function send(sys){
       const ticket = document.getElementById("ticket"+sys).value.trim();
@@ -2031,7 +2502,8 @@ body:not(.light-mode) .agent-card{
 
         tempData = null;
         tempSys = null;
-        loadAll();
+        logActivity("assign_ticket",`ส่ง ${res?.mode || "AUTO"}: ${copyName}`);
+        loadAll(true);
       }).assignTicket(tempData.ticket,tempSys,tempData.agent,currentUser());
     }
 
@@ -2071,12 +2543,12 @@ body:not(.light-mode) .agent-card{
     function closeSuccess(){document.getElementById("successPopup")?.remove()}
     function closePopup(){document.getElementById("popup")?.remove();tempData=null;tempSys=null}
 
-    function loadAll(){
+    function loadAll(force=false){
       SYSTEMS.forEach(sys=>{
-        loadAgents(sys);
-        loadQueue(sys);
-        loadNext(sys);
+        loadAgents(sys,force);
+        loadQueue(sys,force);
       });
+      loadActiveUsers();
     }
 
     function isEditingEndTime(){
@@ -2086,10 +2558,10 @@ body:not(.light-mode) .agent-card{
 
     function autoRefresh(){
       SYSTEMS.forEach(sys=>{
-        if(!isEditingEndTime()) loadAgents(sys);
-        loadQueue(sys);
-        loadNext(sys);
+        if(!isEditingEndTime()) loadAgents(sys,false);
+        loadQueue(sys,false);
       });
+      loadActiveUsers();
     }
 
     function renderAgentCard(a,sys){
@@ -2109,7 +2581,7 @@ body:not(.light-mode) .agent-card{
       const queueBadge = status === "ONLINE" && a.queueNo ? `<span class="queue-badge">คิว ${escapeHtml(a.queueNo)}</span>` : "";
 
       return `
-        <div class="agent-card">
+        <div class="agent-card" data-agent-card="${sys}" data-search="${escapeHtml(`${a.name || ""} ${a.status || ""} ${a.note || ""} ${a.queueNo || ""}`.toLowerCase())}">
           <div>
             <div class="agent-mainline">
               <div class="agent-name"><span class="status-dot ${dotClass}"></span>${escapeHtml(a.name)} ${queueBadge}</div>
@@ -2264,13 +2736,13 @@ body:not(.light-mode) .agent-card{
       google.script.run
         .withSuccessHandler(()=>{
           hideLoading();
-          loadAgents(sys);
-          loadNext(sys);
+          logActivity("update_end_time",`${sys}: ${decodeURIComponent(encodedId)} ${endTime || "ล้างเวลา"}`);
+          loadAgents(sys,true);
         })
         .withFailureHandler(err=>{
           hideLoading();
           alert(err.message || err);
-          loadAgents(sys);
+          loadAgents(sys,true);
         })
         .updateAgentEndTime(decodeURIComponent(encodedId),endTime,sys);
     }
@@ -2280,13 +2752,13 @@ body:not(.light-mode) .agent-card{
       google.script.run
         .withSuccessHandler(()=>{
           hideLoading();
-          loadAgents(sys);
-          loadNext(sys);
+          logActivity("update_break_time",`${sys}: ${decodeURIComponent(encodedId)} ${breakTime || "ล้างเวลา"}`);
+          loadAgents(sys,true);
         })
         .withFailureHandler(err=>{
           hideLoading();
           alert(err.message || err);
-          loadAgents(sys);
+          loadAgents(sys,true);
         })
         .updateAgentBreakTime(decodeURIComponent(encodedId),breakTime,sys);
     }
@@ -2296,22 +2768,24 @@ body:not(.light-mode) .agent-card{
       google.script.run
         .withSuccessHandler(()=>{
           hideLoading();
-          loadAgents(sys);
-          loadNext(sys);
+          logActivity("update_start_time",`${sys}: ${decodeURIComponent(encodedId)} ${startTime || "ล้างเวลา"}`);
+          loadAgents(sys,true);
         })
         .withFailureHandler(err=>{
           hideLoading();
           alert(err.message || err);
-          loadAgents(sys);
+          loadAgents(sys,true);
         })
         .updateAgentStartTime(decodeURIComponent(encodedId),startTime,sys);
     }
 
-    function loadAgents(sys){
+    function loadAgents(sys,force=false){
+      if(!shouldLoad("agents:" + sys, force, 45000)) return;
       google.script.run.withSuccessHandler(data=>{
         let on = "", off = "", breakHtml = "";
         let onCount = 0, offCount = 0, breakCount = 0;
         const rows = data || [];
+        agentCache[sys] = rows;
         const onlineRows = rows
           .filter(a=>a.status === "ONLINE")
           .sort((a,b)=>Number(a.queueNo || 9999) - Number(b.queueNo || 9999));
@@ -2335,6 +2809,9 @@ body:not(.light-mode) .agent-card{
         if(headOnline) headOnline.innerText = onCount;
         if(headBreak) headBreak.innerText = breakCount;
         if(headOffline) headOffline.innerText = offCount;
+        renderNextFromRows(sys, rows);
+        filterAgents(sys);
+        renderQueueMonitor();
 
         const sel = document.getElementById("agent"+sys);
         const keep = sel.value;
@@ -2345,6 +2822,25 @@ body:not(.light-mode) .agent-card{
         });
         sel.value = keep;
       }).getAgents(sys);
+    }
+
+    function filterAgents(sys){
+      const query = String(document.getElementById("agentSearch"+sys)?.value || "").trim().toLowerCase();
+      document.querySelectorAll(`[data-agent-card="${sys}"]`).forEach(card=>{
+        card.style.display = !query || card.dataset.search.includes(query) ? "" : "none";
+      });
+    }
+
+    function clearAgentSearch(sys){
+      const input = document.getElementById("agentSearch"+sys);
+      if(input) input.value = "";
+      filterAgents(sys);
+    }
+
+    function agentNameById(sys,id){
+      const cleanId = String(id || "");
+      const agent = (agentCache[sys] || []).find(a=>String(a.id) === cleanId);
+      return agent?.name || cleanId || "-";
     }
 
     function editNote(encodedId,encodedOld,sys){
@@ -2382,7 +2878,13 @@ body:not(.light-mode) .agent-card{
         return;
       }
       showLoading("กำลังเปลี่ยนสถานะ...");
-      google.script.run.withSuccessHandler(()=>{hideLoading();loadAgents(sys);loadNext(sys)}).toggleAgent(decodeURIComponent(encodedId),sys);
+      const agentId = decodeURIComponent(encodedId);
+      const agentName = agentNameById(sys,agentId);
+      google.script.run.withSuccessHandler(newStatus=>{
+        hideLoading();
+        logActivity(`toggle_status ${newStatus || ""}`.trim(),agentName);
+        loadAgents(sys,true);
+      }).toggleAgent(agentId,sys);
     }
 
     function toggleBreak(encodedId,sys){
@@ -2390,12 +2892,20 @@ body:not(.light-mode) .agent-card{
         return;
       }
       showLoading("กำลังเปลี่ยนสถานะพักเบรก...");
-      google.script.run.withSuccessHandler(()=>{hideLoading();loadAgents(sys);loadNext(sys)}).toggleBreak(decodeURIComponent(encodedId),sys);
+      const agentId = decodeURIComponent(encodedId);
+      const agentName = agentNameById(sys,agentId);
+      google.script.run.withSuccessHandler(newStatus=>{
+        hideLoading();
+        logActivity(`toggle_break ${newStatus || ""}`.trim(),agentName);
+        loadAgents(sys,true);
+      }).toggleBreak(agentId,sys);
     }
 
-    function loadQueue(sys){
+    function loadQueue(sys,force=false){
+      if(!shouldLoad("queue:" + sys, force, 45000)) return;
       google.script.run.withSuccessHandler(data=>{
         let h = "";
+        queueCache[sys] = data || [];
         (data || []).forEach((q,i)=>{
           h += `
             <div class="queue-item ${i === 0 ? "latest" : ""}">
@@ -2404,141 +2914,157 @@ body:not(.light-mode) .agent-card{
             </div>`;
         });
         document.getElementById("queue"+sys).innerHTML = h || `<div class="empty-state">ยังไม่มีงานล่าสุด</div>`;
+        renderQueueMonitor();
       }).getLastQueue(sys);
     }
 
-    function loadHistoryDebounced(){
-      clearTimeout(historySearchTimer);
-      historySearchTimer = setTimeout(loadHistory, 250);
+    function loadLogDebounced(){
+      clearTimeout(logSearchTimer);
+      logSearchTimer = setTimeout(()=>loadLogs(true,true), 250);
     }
 
-    function loadHistory(){
-      initHistoryDate();
-      const historyDate = document.getElementById("historyDate")?.value || todayKey();
-      const searchText = document.getElementById("historySearch")?.value || "";
-      const list = document.getElementById("historyList");
-      if(list) list.innerHTML = `<div class="empty-state">กำลังโหลดประวัติการส่งงาน...</div>`;
+    function loadLogs(force=false,resetPage=false){
+      if(resetPage) logPageIndex = 0;
+      const searchText = document.getElementById("logSearch")?.value || "";
+      const cacheKey = `logs:${logPageIndex}:${searchText}`;
+      if(!shouldLoad(cacheKey, force, 20000)) return;
+      const list = document.getElementById("logList");
+      if(list) list.innerHTML = `<div class="empty-state">กำลังโหลด Log...</div>`;
 
       google.script.run
-        .withSuccessHandler(renderHistory)
+        .withSuccessHandler(renderLogs)
         .withFailureHandler(err=>{
-          document.getElementById("historyTotal").innerText = "โหลดข้อมูลไม่สำเร็จ";
-          document.getElementById("historyList").innerHTML =
-            `<div class="empty-state">History load failed: ${escapeHtml(err.message || err)}</div>`;
+          document.getElementById("logTotal").innerText = "โหลดข้อมูลไม่สำเร็จ";
+          document.getElementById("logList").innerHTML =
+            `<div class="empty-state">Log load failed: ${escapeHtml(err.message || err)}</div>`;
         })
-        .getAssignmentHistory(historyDate, searchText);
+        .getActivityLogs(currentUser(), searchText, logPageIndex, LOG_PAGE_SIZE);
     }
 
-    function renderHistory(history){
-      const rows = history?.rows || [];
-      document.getElementById("historyTotal").innerText = `พบ ${history?.total || 0} รายการ`;
-      document.getElementById("historyList").innerHTML = rows.length ? `
-        <div class="history-row history-header">
-          <div>หมายเลขงาน</div>
-          <div>เจ้าหน้าที่</div>
-          <div>ผู้ส่งงาน</div>
-          <div>ระบบ</div>
-          <div>เวลาส่งงาน</div>
+    function renderLogs(result){
+      const rows = result?.rows || [];
+      const total = Number(result?.total || 0);
+      const start = total && rows.length ? logPageIndex * LOG_PAGE_SIZE + 1 : 0;
+      const end = total && rows.length ? start + rows.length - 1 : 0;
+      document.getElementById("logTotal").innerText = total
+        ? `แสดง ${start}-${end} จาก ${total} รายการ`
+        : "แสดง 0 รายการ";
+      document.getElementById("logList").innerHTML = rows.length ? `
+        <div class="history-row history-header log-row">
+          <div>เวลา</div>
+          <div>User</div>
+          <div>กิจกรรม</div>
+          <div>รายละเอียด</div>
         </div>
         ${rows.map(row=>`
-          <div class="history-row">
+          <div class="history-row log-row">
             <div>
-              <div class="small-text">หมายเลขงาน</div>
-              <span class="history-ticket">${escapeHtml(row.ticket || "-")}</span>
+              <div class="small-text">เวลา</div>
+              <span class="history-time">${escapeHtml(formatDate(row.createdAt))}</span>
             </div>
             <div>
-              <div class="small-text">เจ้าหน้าที่</div>
-              <strong>${escapeHtml(row.agent || "-")}</strong>
+              <div class="small-text">User</div>
+              <strong>${escapeHtml(row.username || "-")}</strong>
             </div>
             <div>
-              <div class="small-text">ผู้ส่งงาน</div>
-              <strong>${escapeHtml(row.user || "-")}</strong>
+              <div class="small-text">กิจกรรม</div>
+              <span class="log-action">${escapeHtml(row.action || "-")}</span>
             </div>
             <div>
-              <div class="small-text">ระบบ</div>
-              <span class="tag">${escapeHtml(row.system || "-")}</span>
-            </div>
-            <div>
-              <div class="small-text">เวลาส่งงาน</div>
-              <span class="history-time">${escapeHtml(formatDate(row.time))}</span>
+              <div class="small-text">รายละเอียด</div>
+              <span>${escapeHtml(row.detail || "-")}</span>
             </div>
           </div>
         `).join("")}
-      ` : `<div class="empty-state">ไม่พบประวัติการส่งงานตามเงื่อนไขที่เลือก</div>`;
+      ` : `<div class="empty-state">ไม่พบ Log ตามเงื่อนไขที่เลือก</div>`;
+      renderLogPager(total, rows.length);
     }
 
-    function loadNext(sys){
-      google.script.run.withSuccessHandler(a=>{
-        document.getElementById("next"+sys).innerHTML = a ? `⏳ ลำดับถัดไป: ${escapeHtml(a.name)}` : "ยังไม่มีคน Online สำหรับรับงาน";
-      }).getNextInQueue(sys);
+    function renderLogPager(total, rowCount){
+      const pager = document.getElementById("logPager");
+      if(!pager) return;
+      const totalPages = Math.max(1, Math.ceil(Number(total || 0) / LOG_PAGE_SIZE));
+      const pageNo = Math.min(logPageIndex + 1, totalPages);
+      pager.innerHTML = `
+        <button class="secondary-btn" ${logPageIndex <= 0 ? "disabled" : ""} onclick="changeLogPage(-1)">ก่อนหน้า</button>
+        <span>หน้า ${pageNo} / ${totalPages}</span>
+        <button class="secondary-btn" ${(logPageIndex + 1 >= totalPages || !rowCount) ? "disabled" : ""} onclick="changeLogPage(1)">ถัดไป</button>
+      `;
+    }
+
+    function changeLogPage(delta){
+      logPageIndex = Math.max(0, logPageIndex + delta);
+      loadLogs(true,false);
+    }
+
+    function renderNextFromRows(sys, rows){
+      const next = (rows || [])
+        .filter(a=>a.status === "ONLINE" && a.queueNo)
+        .sort((a,b)=>Number(a.queueNo || 9999) - Number(b.queueNo || 9999))[0];
+      document.getElementById("next"+sys).innerHTML = next
+        ? `⏳ ลำดับถัดไป: ${escapeHtml(next.name)}`
+        : "ยังไม่มีคน Online สำหรับรับงาน";
+      const monitorNext = document.getElementById("queuePageNext"+sys);
+      if(monitorNext){
+        monitorNext.innerHTML = next ? `ถัดไป: ${escapeHtml(next.name)}` : "ยังไม่มีคน Online";
+      }
+    }
+
+    function loadQueuePage(){
+      SYSTEMS.forEach(sys=>{
+        loadAgents(sys,true);
+        loadQueue(sys,true);
+      });
+      renderQueueMonitor();
+    }
+
+    function clearQueueSearch(){
+      const input = document.getElementById("queueSearch");
+      if(input) input.value = "";
+      renderQueueMonitor();
+    }
+
+    function renderQueueMonitor(){
+      const query = String(document.getElementById("queueSearch")?.value || "").trim().toLowerCase();
+      SYSTEMS.forEach(sys=>{
+        const jobsTarget = document.getElementById("queuePageJobs"+sys);
+        const agentsTarget = document.getElementById("queuePageAgents"+sys);
+        if(!jobsTarget || !agentsTarget) return;
+
+        const jobs = (queueCache[sys] || []).filter(job=>{
+          const text = `${job.ticket || ""} ${job.agent || ""} ${job.user || ""} ${job.mode || ""}`.toLowerCase();
+          return !query || text.includes(query);
+        });
+        jobsTarget.innerHTML = jobs.length ? jobs.map((q,i)=>`
+          <div class="queue-item ${i === 0 ? "latest" : ""}">
+            <span class="queue-ticket">Ticket: ${escapeHtml(q.ticket || "-")} | SD: ${escapeHtml(q.agent || "-")}</span>
+            <div class="small-text">CS: ${escapeHtml(q.user || "-")} | Mode: ${escapeHtml(q.mode || "-")} | ${escapeHtml(formatDate(q.time))}</div>
+          </div>
+        `).join("") : `<div class="empty-state">ยังไม่มีงานล่าสุด</div>`;
+
+        const agents = (agentCache[sys] || [])
+          .filter(a=>a.status === "ONLINE")
+          .sort((a,b)=>Number(a.queueNo || 9999) - Number(b.queueNo || 9999))
+          .filter(a=>{
+            const text = `${a.name || ""} ${a.status || ""} ${a.note || ""} ${a.queueNo || ""}`.toLowerCase();
+            return !query || text.includes(query);
+          });
+        agentsTarget.innerHTML = agents.length ? agents.map(a=>`
+          <div class="agent-card readonly-agent">
+            <div>
+              <div class="agent-name"><span class="status-dot online"></span>${escapeHtml(a.name || "-")}</div>
+              <div class="small-text">${escapeHtml(a.note || "ไม่มี note")} | วันนี้ ${escapeHtml(a.todayCount || 0)} งาน</div>
+            </div>
+            <span class="queue-badge">คิว ${escapeHtml(a.queueNo || "-")}</span>
+          </div>
+        `).join("") : `<div class="empty-state">ยังไม่มีคน Online สำหรับรับงาน</div>`;
+      });
     }
 
     function deleteLast(sys){
       if(!confirm("ยืนยันลบงานล่าสุดของ " + sys + " ?")) return;
       showLoading("กำลังลบงานล่าสุด...");
-      google.script.run.withSuccessHandler(()=>{hideLoading();loadQueue(sys);loadNext(sys)}).deleteLastTicket(sys);
-    }
-
-    function loadReport(){
-      initReportDate();
-      const reportDate = document.getElementById("reportDate")?.value || todayKey();
-      google.script.run
-        .withSuccessHandler(renderReport)
-        .withFailureHandler(err=>{
-          SYSTEMS.forEach(sys=>{
-            document.getElementById("hourly"+sys).innerHTML =
-              `<div class="empty-state">Report load failed: ${escapeHtml(err.message || err)}</div>`;
-            document.getElementById("agentSummary"+sys).innerHTML = "";
-            document.getElementById("userSummary"+sys).innerHTML = "";
-          });
-        })
-        .getReportData(reportDate);
-    }
-
-    function renderReport(report){
-      SYSTEMS.forEach(sys=>{
-        const data = report?.systems?.[sys] || {total:0,hourly:[],byAgent:[],byUser:[]};
-        const skipped = data.skippedRows ? ` | skipped ${data.skippedRows} rows` : "";
-        document.getElementById("reportTotal"+sys).innerText =
-          `Total ${data.total || 0} jobs from ${data.sheetName || "Queue_" + sys}${skipped}`;
-        renderHourlyChart("hourly"+sys, data.hourly || []);
-        renderAgentSummary("agentSummary"+sys, data.byAgent || []);
-        renderUserSummary("userSummary"+sys, data.byUser || []);
-      });
-    }
-
-    function renderHourlyChart(id, hourly){
-      const max = Math.max(1,...hourly.map(h=>h.count || 0));
-      const html = hourly.map(h=>{
-        const height = Math.max(3, Math.round(((h.count || 0) / max) * 150));
-        return `
-          <div class="bar-wrap" title="${h.hour}:00 = ${h.count || 0}">
-            <div class="bar-count">${h.count || ""}</div>
-            <div class="bar" style="height:${height}px"></div>
-            <div class="bar-label">${String(h.hour).padStart(2,"0")}</div>
-          </div>`;
-      }).join("");
-      document.getElementById(id).innerHTML = html || `<div class="empty-state">ยังไม่มีข้อมูล</div>`;
-    }
-
-    function renderAgentSummary(id, rows){
-      const max = Math.max(1,...rows.map(r=>r.count || 0));
-      document.getElementById(id).innerHTML = rows.length ? rows.map(r=>`
-        <div class="summary-row summary-bar-row" style="--bar-width:${Math.round(((r.count || 0) / max) * 100)}%">
-          <strong>${escapeHtml(r.name)}</strong>
-          <span>${r.count} jobs</span>
-        </div>
-      `).join("") : `<div class="empty-state">No queue data</div>`;
-    }
-
-    function renderUserSummary(id, rows){
-      const max = Math.max(1,...rows.map(r=>r.count || 0));
-      document.getElementById(id).innerHTML = rows.length ? rows.map(r=>`
-        <div class="summary-row summary-bar-row" style="--bar-width:${Math.round(((r.count || 0) / max) * 100)}%">
-          <strong>${escapeHtml(r.name)}</strong>
-          <span>${r.count} sent</span>
-        </div>
-      `).join("") : `<div class="empty-state">No user data</div>`;
+      google.script.run.withSuccessHandler(()=>{hideLoading();logActivity("delete_last_ticket",sys);loadQueue(sys,true);loadAgents(sys,true)}).deleteLastTicket(sys);
     }
 
     function loadAdmin(){
@@ -2610,8 +3136,9 @@ body:not(.light-mode) .agent-card{
 
       google.script.run.withSuccessHandler(()=>{
         clearAgentForm();
+        logActivity("save_agent",`${sys}: ${agent.name}`);
         loadAdmin();
-        loadAll();
+        loadAll(true);
       }).saveAgentAdmin(currentUser(),sys,agent);
     }
 
@@ -2623,7 +3150,7 @@ body:not(.light-mode) .agent-card{
 
     function deleteAdminAgent(sys,encodedId){
       if(!confirm("ยืนยันลบเจ้าหน้าที่?")) return;
-      google.script.run.withSuccessHandler(()=>{loadAdmin();loadAll()}).deleteAgentAdmin(currentUser(),sys,decodeURIComponent(encodedId));
+      google.script.run.withSuccessHandler(()=>{logActivity("delete_agent",`${sys}: ${decodeURIComponent(encodedId)}`);loadAdmin();loadAll(true)}).deleteAgentAdmin(currentUser(),sys,decodeURIComponent(encodedId));
     }
 
     function renderAdminUsers(rows){
@@ -2631,27 +3158,45 @@ body:not(.light-mode) .agent-card{
         <div class="data-row">
           <div>
             <strong>${escapeHtml(u.username)}</strong>
-            <div class="small-text">Group: ${escapeHtml(u.group)}</div>
+            <div class="small-text">Group: ${escapeHtml(u.group)} | เมนู: ${escapeHtml((u.menuPermissions || []).map(page=>MENU_LABELS[page] || page).join(", ") || "-")}</div>
           </div>
           <div class="admin-actions">
-            <button class="secondary-btn" onclick="fillUserForm('${encodeURIComponent(u.username)}','${encodeURIComponent(u.password)}','${encodeURIComponent(u.group)}')">แก้ไข</button>
+            <button class="secondary-btn" onclick="fillUserForm('${encodeURIComponent(u.username)}','${encodeURIComponent(u.password)}','${encodeURIComponent(u.group)}','${encodeURIComponent(JSON.stringify(u.menuPermissions || DEFAULT_MENU_PERMISSIONS))}')">แก้ไข</button>
             <button class="danger-btn" onclick="deleteAdminUser('${encodeURIComponent(u.username)}')">ลบ</button>
           </div>
         </div>
       `).join("") : `<div class="empty-state">ยังไม่มี user</div>`;
     }
 
-    function fillUserForm(username,password,group){
+    function setMenuChecks(menuPermissions){
+      const allowed = new Set(menuPermissions?.length ? menuPermissions : DEFAULT_MENU_PERMISSIONS);
+      document.querySelectorAll(".menu-check").forEach(input=>{
+        input.checked = allowed.has(input.value);
+      });
+    }
+
+    function getMenuChecks(){
+      const values = Array.from(document.querySelectorAll(".menu-check:checked")).map(input=>input.value);
+      return values.includes("assignPage") ? values : ["assignPage",...values];
+    }
+
+    function fillUserForm(username,password,group,menuPermissions){
       document.getElementById("adminUsername").value = decodeURIComponent(username);
       document.getElementById("adminPassword").value = decodeURIComponent(password);
       document.getElementById("adminGroup").value = decodeURIComponent(group || "user");
+      try{
+        setMenuChecks(JSON.parse(decodeURIComponent(menuPermissions || "[]")));
+      }catch(_err){
+        setMenuChecks(DEFAULT_MENU_PERMISSIONS);
+      }
     }
 
     function saveAdminUser(){
       const userData = {
         username: document.getElementById("adminUsername").value.trim(),
         password: document.getElementById("adminPassword").value,
-        group: document.getElementById("adminGroup").value
+        group: document.getElementById("adminGroup").value,
+        menuPermissions: getMenuChecks()
       };
       if(!userData.username || !userData.password) return alert("กรุณาใส่ Username และ Password");
 
@@ -2659,13 +3204,15 @@ body:not(.light-mode) .agent-card{
         document.getElementById("adminUsername").value = "";
         document.getElementById("adminPassword").value = "";
         document.getElementById("adminGroup").value = "user";
+        setMenuChecks(DEFAULT_MENU_PERMISSIONS);
+        logActivity("save_user",userData.username);
         loadAdmin();
       }).saveUserAdmin(currentUser(),userData);
     }
 
     function deleteAdminUser(encodedUsername){
       if(!confirm("ยืนยันลบ user?")) return;
-      google.script.run.withSuccessHandler(loadAdmin).deleteUserAdmin(currentUser(),decodeURIComponent(encodedUsername));
+      google.script.run.withSuccessHandler(()=>{logActivity("delete_user",decodeURIComponent(encodedUsername));loadAdmin()}).deleteUserAdmin(currentUser(),decodeURIComponent(encodedUsername));
     }
 
     function showLoading(text="กำลังอัปเดต..."){
@@ -2698,8 +3245,6 @@ body:not(.light-mode) .agent-card{
     (function initLogin(){
       applyTheme();
       initTimeSelectors();
-      initReportDate();
-      initHistoryDate();
       if(localStorage.getItem("login") === "true"){
         enterApp();
       }else{
@@ -2711,9 +3256,9 @@ body:not(.light-mode) .agent-card{
     setInterval(()=>{
       if(localStorage.getItem("login") === "true"){
         autoRefresh();
-        if(document.getElementById("reportPage").classList.contains("active")) loadReport();
+        if(document.getElementById("logPage")?.classList.contains("active")) loadLogs();
       }
-    },60000);
+    },120000);
   </script>
 </body>
 </html>
