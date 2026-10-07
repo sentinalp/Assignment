@@ -5,6 +5,11 @@
   const BREAK_BEFORE_START_MINUTES = 15;
   const END_TIME_RESET_HOUR = 5;
   const END_TIME_RESET_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+  const DEFAULT_MENU_PERMISSIONS = ["assignPage", "queuePage"];
+  const ADMIN_MENU_PERMISSIONS = ["assignPage", "queuePage", "logPage", "adminPage"];
+  const LOG_RETENTION_HOURS = 4;
+  const LOG_DELETE_AFTER_HOURS = 5;
+  const ACTIVE_USER_MINUTES = 5;
   let lastEndTimeResetCheck = 0;
 
   const config = window.APP_CONFIG || {};
@@ -69,6 +74,22 @@
 
   function getFirstName(value) {
     return String(value || "").trim().split(/\s+/)[0] || "";
+  }
+
+  function normalizeMenuPermissions(value, group = "user") {
+    const raw = Array.isArray(value) ? value : DEFAULT_MENU_PERMISSIONS;
+    const allowed = new Set(raw.filter((page) => ["assignPage", "queuePage", "logPage", "adminPage"].includes(page)));
+    allowed.add("assignPage");
+    if (String(group || "user").toLowerCase() === "admin") {
+      ADMIN_MENU_PERMISSIONS.forEach((page) => allowed.add(page));
+    }
+    return Array.from(allowed);
+  }
+
+  function hoursAgo(hours) {
+    const date = new Date();
+    date.setTime(date.getTime() - hours * 60 * 60 * 1000);
+    return date.toISOString();
   }
 
   function parseReportDate(dateText) {
@@ -344,16 +365,20 @@
     assertReady();
     const { data, error } = await db
       .from("users")
-      .select("username, password, user_group")
+      .select("username, password, user_group, menu_permissions")
       .eq("username", String(user))
       .eq("password", String(pass))
       .maybeSingle();
     if (error) throw error;
     if (!data) return { success: false };
+    const group = String(data.user_group || "user").toLowerCase();
+    const menuPermissions = normalizeMenuPermissions(data.menu_permissions, group);
+    await touchPresence(data.username, "login", "เข้าสู่ระบบ");
     return {
       success: true,
       user: data.username,
-      group: String(data.user_group || "user").toLowerCase()
+      group,
+      menuPermissions
     };
   }
 
@@ -535,6 +560,119 @@
     return true;
   }
 
+  async function getUserAccess(username) {
+    assertReady();
+    const { data, error } = await db
+      .from("users")
+      .select("user_group, menu_permissions")
+      .eq("username", String(username || ""))
+      .maybeSingle();
+    if (error) throw error;
+    const group = String(data?.user_group || "user").toLowerCase();
+    return {
+      group,
+      menuPermissions: normalizeMenuPermissions(data?.menu_permissions, group)
+    };
+  }
+
+  async function cleanupOldActivityLogs() {
+    assertReady();
+    const { error } = await db
+      .from("activity_logs")
+      .delete()
+      .lt("created_at", hoursAgo(LOG_DELETE_AFTER_HOURS));
+    if (error) console.warn("Activity log cleanup failed", error);
+  }
+
+  async function logUserActivity(username, action, detail = "") {
+    assertReady();
+    const cleanAction = String(action || "activity").trim();
+    if (!username || cleanAction === "active") return { ok: true };
+    await cleanupOldActivityLogs();
+    const { error } = await db.from("activity_logs").insert({
+      username: String(username),
+      action: cleanAction,
+      detail: String(detail || "").slice(0, 500)
+    });
+    if (error) throw error;
+    return { ok: true };
+  }
+
+  async function touchPresence(username, action = "active", detail = "") {
+    assertReady();
+    if (!username) return { ok: false };
+    const now = new Date().toISOString();
+    const { error } = await db.from("user_presence").upsert({
+      username: String(username),
+      last_seen_at: now,
+      last_action: String(action || "active").slice(0, 80),
+      updated_at: now
+    }, { onConflict: "username" });
+    if (error) throw error;
+    if (action && action !== "active") {
+      await logUserActivity(username, action, detail);
+    }
+    return { ok: true };
+  }
+
+  async function getActiveUsers() {
+    assertReady();
+    const { data, error } = await db
+      .from("user_presence")
+      .select("username, last_seen_at, last_action")
+      .gte("last_seen_at", hoursAgo(ACTIVE_USER_MINUTES / 60))
+      .order("last_seen_at", { ascending: false });
+    if (error) throw error;
+    return (data || []).map((row) => ({
+      username: row.username,
+      lastSeenAt: row.last_seen_at,
+      lastAction: row.last_action
+    }));
+  }
+
+  async function clearPresence(username) {
+    assertReady();
+    if (!username) return { ok: false };
+    await logUserActivity(username, "logout", "ออกจากระบบ");
+    const { error } = await db.from("user_presence").delete().eq("username", String(username));
+    if (error) throw error;
+    return { ok: true };
+  }
+
+  async function getActivityLogs(username, searchText = "", page = 0, pageSize = 10) {
+    const access = await getUserAccess(username);
+    if (access.group !== "admin" && !access.menuPermissions.includes("logPage")) {
+      throw new Error("Log permission required");
+    }
+    await cleanupOldActivityLogs();
+    const queryText = String(searchText || "").trim().replace(/[%_,]/g, " ");
+    const safePageSize = Math.min(10, Math.max(1, Number(pageSize) || 10));
+    const safePage = Math.max(0, Number(page) || 0);
+    const from = safePage * safePageSize;
+    const to = from + safePageSize - 1;
+    let query = db
+      .from("activity_logs")
+      .select("id, username, action, detail, created_at", { count: "exact" })
+      .gte("created_at", hoursAgo(LOG_RETENTION_HOURS))
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (queryText) {
+      query = query.or(`username.ilike.%${queryText}%,action.ilike.%${queryText}%,detail.ilike.%${queryText}%`);
+    }
+    const { data, error, count } = await query;
+    if (error) throw error;
+    return {
+      total: count || 0,
+      rows: (data || []).map((row) => ({
+        id: row.id,
+        username: row.username,
+        action: row.action,
+        detail: row.detail,
+        createdAt: row.created_at
+      }))
+    };
+  }
+
   async function getReportData(reportDate) {
     assertReady();
     const dateKey = parseReportDate(reportDate);
@@ -677,13 +815,14 @@
     await requireAdmin(username);
     const { data, error } = await db
       .from("users")
-      .select("username, password, user_group")
+      .select("username, password, user_group, menu_permissions")
       .order("username", { ascending: true });
     if (error) throw error;
     return (data || []).map((row) => ({
       username: row.username,
       password: row.password,
-      group: String(row.user_group || "user").toLowerCase()
+      group: String(row.user_group || "user").toLowerCase(),
+      menuPermissions: normalizeMenuPermissions(row.menu_permissions, row.user_group)
     }));
   }
 
@@ -694,6 +833,7 @@
       username: userData.username,
       password: userData.password || "",
       user_group: String(userData.group || "user").toLowerCase(),
+      menu_permissions: normalizeMenuPermissions(userData.menuPermissions, userData.group),
       updated_at: new Date().toISOString()
     }, { onConflict: "username" });
     if (error) throw error;
@@ -708,6 +848,17 @@
     const { error } = await db.from("users").delete().eq("username", targetUsername);
     if (error) throw error;
     return true;
+  }
+
+  function subscribeToChanges(onChange) {
+    if (!db?.channel || typeof onChange !== "function") return null;
+    return db
+      .channel("work-assignment-lite-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: "agents" }, () => onChange("agents"))
+      .on("postgres_changes", { event: "*", schema: "public", table: "queue" }, () => onChange("queue"))
+      .on("postgres_changes", { event: "*", schema: "public", table: "user_presence" }, () => onChange("user_presence"))
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "activity_logs" }, () => onChange("activity_logs"))
+      .subscribe();
   }
 
   window.WorkAssignmentApi = {
@@ -726,12 +877,18 @@
     getReportData,
     getAssignmentHistory,
     getTodaySummary,
+    touchPresence,
+    clearPresence,
+    getActiveUsers,
+    logUserActivity,
+    getActivityLogs,
     getAdminAgents,
     saveAgentAdmin,
     deleteAgentAdmin,
     getUsersAdmin,
     saveUserAdmin,
-    deleteUserAdmin
+    deleteUserAdmin,
+    subscribeToChanges
   };
 
   function createRunner(successHandler, failureHandler) {
