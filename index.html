@@ -2154,7 +2154,7 @@ body.light-mode .system-tools .secondary-btn{
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./assets/app-config.js"></script>
-  <script src="./assets/supabase-api.js?v=2"></script>
+  <script src="./assets/supabase-api.js?v=3"></script>
   <script>
     const SYSTEMS = ["KFC","NONKFC"];
     const PAGE_TEXT = {
@@ -2179,8 +2179,16 @@ body.light-mode .system-tools .secondary-btn{
     let logSearchTimer = null;
     let logPageIndex = 0;
     const LOG_PAGE_SIZE = 10;
+    const DATA_CACHE_TTL_MS = 2 * 60 * 1000;
+    const ACTIVE_USERS_CACHE_TTL_MS = 2 * 60 * 1000;
+    const PRESENCE_SEND_INTERVAL_MS = 5 * 60 * 1000;
+    const AUTO_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+    const REALTIME_REFRESH_DEBOUNCE_MS = 1200;
     let activityTimer = null;
     let realtimeReady = false;
+    let realtimeRefreshTimer = null;
+    const pendingRealtimeTables = new Set();
+    const pendingRealtimeSystems = new Set();
     const lastLoads = {};
 
     function escapeHtml(value){
@@ -2411,7 +2419,7 @@ body.light-mode .system-tools .secondary-btn{
       if(localStorage.getItem("login") !== "true") return;
       if(action === "active"){
         const now = Date.now();
-        if(now - Number(localStorage.getItem("lastPresenceSent") || 0) < 60000) return;
+        if(now - Number(localStorage.getItem("lastPresenceSent") || 0) < PRESENCE_SEND_INTERVAL_MS) return;
         localStorage.setItem("lastPresenceSent", now);
       }
       google.script.run
@@ -2419,8 +2427,9 @@ body.light-mode .system-tools .secondary-btn{
         .touchPresence(currentUser(),action,detail);
     }
 
-    function loadActiveUsers(){
+    function loadActiveUsers(force=false){
       if(localStorage.getItem("login") !== "true") return;
+      if(!shouldLoad("activeUsers", force, ACTIVE_USERS_CACHE_TTL_MS)) return;
       google.script.run.withSuccessHandler(users=>{
         const names = (users || []).map(u=>u.username).filter(Boolean);
         const target = document.getElementById("activeUsers");
@@ -2436,20 +2445,33 @@ body.light-mode .system-tools .secondary-btn{
     function setupRealtime(){
       if(realtimeReady || !window.WorkAssignmentApi?.subscribeToChanges) return;
       realtimeReady = true;
-      window.WorkAssignmentApi.subscribeToChanges((table)=>{
-        if(table === "agents"){
-          SYSTEMS.forEach(sys=>loadAgents(sys,true));
-        }
-        if(table === "queue"){
-          SYSTEMS.forEach(sys=>loadAgents(sys,true));
-          SYSTEMS.forEach(sys=>loadQueue(sys,true));
-        }
-        if(table === "user_presence") loadActiveUsers();
-        if(table === "activity_logs" && document.getElementById("logPage")?.classList.contains("active")) loadLogs(true);
+      window.WorkAssignmentApi.subscribeToChanges((table,payload={})=>{
+        const system = payload?.new?.system || payload?.old?.system || "";
+        if(system) pendingRealtimeSystems.add(system);
+        pendingRealtimeTables.add(table);
+        clearTimeout(realtimeRefreshTimer);
+        realtimeRefreshTimer = setTimeout(()=>{
+          const systems = pendingRealtimeSystems.size
+            ? Array.from(pendingRealtimeSystems).filter(sys=>SYSTEMS.includes(sys))
+            : SYSTEMS;
+          const tables = new Set(pendingRealtimeTables);
+          pendingRealtimeSystems.clear();
+          pendingRealtimeTables.clear();
+
+          if(tables.has("agents")){
+            systems.forEach(sys=>loadAgents(sys,true));
+          }
+          if(tables.has("queue")){
+            systems.forEach(sys=>loadAgents(sys,true));
+            systems.forEach(sys=>loadQueue(sys,true));
+          }
+          if(tables.has("user_presence")) loadActiveUsers(true);
+          if(tables.has("activity_logs") && document.getElementById("logPage")?.classList.contains("active")) loadLogs(true);
+        },REALTIME_REFRESH_DEBOUNCE_MS);
       });
     }
 
-    function shouldLoad(key,force=false,ttl=45000){
+    function shouldLoad(key,force=false,ttl=DATA_CACHE_TTL_MS){
       const now = Date.now();
       if(force){
         lastLoads[key] = now;
@@ -2810,7 +2832,7 @@ body.light-mode .system-tools .secondary-btn{
     }
 
     function loadAgents(sys,force=false){
-      if(!shouldLoad("agents:" + sys, force, 45000)) return;
+      if(!shouldLoad("agents:" + sys, force, DATA_CACHE_TTL_MS)) return;
       google.script.run.withSuccessHandler(data=>{
         let on = "", off = "", breakHtml = "";
         let onCount = 0, offCount = 0, breakCount = 0;
@@ -2932,7 +2954,7 @@ body.light-mode .system-tools .secondary-btn{
     }
 
     function loadQueue(sys,force=false){
-      if(!shouldLoad("queue:" + sys, force, 45000)) return;
+      if(!shouldLoad("queue:" + sys, force, DATA_CACHE_TTL_MS)) return;
       google.script.run.withSuccessHandler(data=>{
         let h = "";
         queueCache[sys] = data || [];
@@ -3288,7 +3310,7 @@ body.light-mode .system-tools .secondary-btn{
         autoRefresh();
         if(document.getElementById("logPage")?.classList.contains("active")) loadLogs();
       }
-    },120000);
+    },AUTO_REFRESH_INTERVAL_MS);
   </script>
 </body>
 </html>
