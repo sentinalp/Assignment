@@ -471,6 +471,7 @@
       background:rgba(255,255,255,0.05);       /* 👈 พื้นหลังจาง ๆ */
       font-weight:600;
       font-size: 15px;
+      white-space:nowrap;
     }
 
     .status-dot{
@@ -1021,7 +1022,7 @@ body:not(.light-mode) .next-inline{
     .assignment-count{
       display:inline-flex;
       align-items:center;
-      margin-right:8px;
+      margin-right:0;
       min-height:26px;
       padding:4px 8px;
       border-radius:999px;
@@ -1030,6 +1031,14 @@ body:not(.light-mode) .next-inline{
       font-size:12px;
       font-weight:1000;
       white-space:nowrap;
+    }
+
+    .agent-heading{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:nowrap;
+      min-width:0;
     }
 
     .agent-mainline{
@@ -1109,6 +1118,8 @@ body:not(.light-mode) .next-inline{
       .head-status-summary{width:100%;min-width:0}
       .head-status-label{font-size:11px}
       .agent-control-row{grid-template-columns:1fr}
+      .agent-heading{flex-wrap:wrap}
+      .agent-name{white-space:normal}
       .time-controls{justify-items:start}
       .time-row{grid-template-columns:78px 50px 50px auto auto}
       .closing-label{width:78px}
@@ -1715,7 +1726,7 @@ body{
 }
 .agent-mainline{
   display:grid;
-  gap:5px;
+  gap:4px;
 }
 .primary-btn,.send-btn,.btn-ok{
   background:linear-gradient(135deg,#4f8fb8,#4fa39a);
@@ -2601,8 +2612,10 @@ body.light-mode .system-tools .secondary-btn{
         <div class="agent-card ${statusClass}" data-agent-card="${sys}" data-search="${escapeHtml(`${a.name || ""} ${a.status || ""} ${a.note || ""} ${a.queueNo || ""}`.toLowerCase())}">
           <div>
             <div class="agent-mainline">
-              <div class="agent-name"><span class="status-dot ${dotClass}"></span>${escapeHtml(a.name)} ${queueBadge}</div>
-              <span class="assignment-count">วันนี้ ${todayCount} งาน</span>
+              <div class="agent-heading">
+                <div class="agent-name"><span class="status-dot ${dotClass}"></span>${escapeHtml(a.name)} ${queueBadge}</div>
+                <span class="assignment-count">วันนี้ ${todayCount} งาน</span>
+              </div>
               <div class="note">
                 ${escapeHtml(note)}
                 <button class="note-btn" onclick="editNote('${encodeURIComponent(a.id)}','${encodeURIComponent(a.note || "")}','${sys}')">แก้ไข</button>
