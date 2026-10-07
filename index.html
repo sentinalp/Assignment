@@ -438,10 +438,24 @@
   justify-content:space-between;
   align-items:center;
   gap:12px;
+  position:relative;
+  overflow:hidden;
   border:0.2px solid rgba(255,255,255,.24);
   box-shadow:var(--shadow-inset); 
   background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
 }
+
+.agent-card::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:5px;
+  background:var(--agent-status-color,var(--muted));
+}
+
+.agent-card.status-online{--agent-status-color:var(--brand)}
+.agent-card.status-break{--agent-status-color:var(--amber)}
+.agent-card.status-offline{--agent-status-color:var(--red)}
 
 .agent-card > div:first-child{
   flex:1;
@@ -450,13 +464,13 @@
     .agent-name{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:4px 10px;              /* 👈 ระยะขอบด้านใน */
+      gap:6px;
+      padding:3px 9px;              /* 👈 ระยะขอบด้านใน */
       border-radius:999px;           /* 👈 ทำให้โค้งแบบ pill */
       border:1px solid rgba(100,116,139,0.4);  /* 👈 เส้นกรอบ */
       background:rgba(255,255,255,0.05);       /* 👈 พื้นหลังจาง ๆ */
       font-weight:600;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .status-dot{
@@ -470,7 +484,7 @@
     .status-dot.break{background:var(--amber)}
     .status-dot.offline{background:var(--red)}
 
-    .note{margin-top:6px;gap:20px;color:#cccc99;font-size:14px;line-height:1.5}
+    .note{margin-top:4px;gap:12px;color:#cccc99;font-size:13px;line-height:1.35}
     .agent-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 
     .switch{position:relative;width:52px;height:26px;display:inline-block}
@@ -973,18 +987,18 @@ body:not(.light-mode) .next-inline{
   color: #111827;
 }
     .agent-meta{
-      margin-top:8px;
+      margin-top:6px;
       display:flex;
       align-items:center;
-      gap:8px;
+      gap:6px;
       flex-wrap:wrap;
     }
 
     .end-time-field{
       width:54px;
-      min-height:32px;
-      padding:6px 8px;
-      border-radius:10px;
+      min-height:28px;
+      padding:4px 7px;
+      border-radius:8px;
       font-size:12px;
       font-weight:900;
       cursor:pointer;
@@ -993,12 +1007,12 @@ body:not(.light-mode) .next-inline{
     .closing-chip{
       display:inline-flex;
       align-items:center;
-      min-height:26px;
-      padding:4px 9px;
+      min-height:24px;
+      padding:3px 8px;
       border-radius:999px;
       background:rgba(245,158,11,.14);
       color:#b45309;
-      font-size:12px;
+      font-size:11px;
       font-weight:900;
     }
 
@@ -1007,13 +1021,13 @@ body:not(.light-mode) .next-inline{
     .assignment-count{
       display:inline-flex;
       align-items:center;
-      margin-right:18px;
-      min-height:30px;
-      padding:5px 10px;
+      margin-right:8px;
+      min-height:26px;
+      padding:4px 8px;
       border-radius:999px;
       background:rgba(47,128,237,.13);
       color:var(--ink);
-      font-size:13px;
+      font-size:12px;
       font-weight:1000;
       white-space:nowrap;
     }
@@ -1028,25 +1042,25 @@ body:not(.light-mode) .next-inline{
     .time-controls{
       display:grid;
       grid-template-columns:1fr;
-      gap:6px;
+      gap:4px;
       justify-items:end;
       width:100%;
     }
 
     .time-row{
       display:grid;
-      grid-template-columns:88px 54px 54px auto auto minmax(176px,auto);
+      grid-template-columns:82px 50px 50px auto auto minmax(150px,auto);
       align-items:center;
-      gap:6px;
-      width:min(100%,560px);
+      gap:5px;
+      width:min(100%,520px);
       max-width:100%;
     }
 
     .closing-label{
       display:block;
-      width:88px;
+      width:82px;
       text-align:left;
-      font-size:13px;
+      font-size:12px;
       font-weight:1000;
       line-height:1;
       white-space:nowrap;
@@ -1063,25 +1077,25 @@ body:not(.light-mode) .next-inline{
     }
 
     .note-row{
-      margin-top:10px;
+      margin-top:8px;
       display:grid;
       grid-template-columns:minmax(180px,1fr) auto;
-      align-items:center;
-      gap:28px;
-    }
-
-    .agent-control-row{
-      margin-top:10px;
-      display:grid;
-      grid-template-columns:auto minmax(360px,1fr);
       align-items:center;
       gap:18px;
     }
 
+    .agent-control-row{
+      margin-top:8px;
+      display:grid;
+      grid-template-columns:auto minmax(320px,1fr);
+      align-items:center;
+      gap:12px;
+    }
+
     .time-btn{
-      min-height:30px;
-      padding:5px 8px;
-      border-radius:10px;
+      min-height:28px;
+      padding:4px 7px;
+      border-radius:8px;
       background:rgba(47,128,237,.12);
       color:var(--ink);
       border:1px solid rgba(47,128,237,.18);
@@ -1695,11 +1709,13 @@ body{
   box-shadow:none;
 }
 .agent-card{
-  padding:13px;
+  padding:10px 12px 10px 16px;
+  gap:10px;
+  align-items:flex-start;
 }
 .agent-mainline{
   display:grid;
-  gap:7px;
+  gap:5px;
 }
 .primary-btn,.send-btn,.btn-ok{
   background:linear-gradient(135deg,#4f8fb8,#4fa39a);
@@ -2567,6 +2583,7 @@ body.light-mode .system-tools .secondary-btn{
     function renderAgentCard(a,sys){
       const status = String(a.status || "OFFLINE");
       const dotClass = status === "ONLINE" ? "online" : status === "BREAK" ? "break" : "offline";
+      const statusClass = status === "ONLINE" ? "status-online" : status === "BREAK" ? "status-break" : "status-offline";
       const note = a.note || "ไม่มี note";
       const endTime = a.endTime || "";
       const endTimeText = endTime ? `เลิกงาน ${escapeHtml(endTime)} | Offline ก่อน 15 นาที` : "-";
@@ -2581,7 +2598,7 @@ body.light-mode .system-tools .secondary-btn{
       const queueBadge = status === "ONLINE" && a.queueNo ? `<span class="queue-badge">คิว ${escapeHtml(a.queueNo)}</span>` : "";
 
       return `
-        <div class="agent-card" data-agent-card="${sys}" data-search="${escapeHtml(`${a.name || ""} ${a.status || ""} ${a.note || ""} ${a.queueNo || ""}`.toLowerCase())}">
+        <div class="agent-card ${statusClass}" data-agent-card="${sys}" data-search="${escapeHtml(`${a.name || ""} ${a.status || ""} ${a.note || ""} ${a.queueNo || ""}`.toLowerCase())}">
           <div>
             <div class="agent-mainline">
               <div class="agent-name"><span class="status-dot ${dotClass}"></span>${escapeHtml(a.name)} ${queueBadge}</div>
@@ -2593,7 +2610,7 @@ body.light-mode .system-tools .secondary-btn{
               </div>
             </div>
             <div class="agent-control-row">
-              <div class="agent-actions" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+              <div class="agent-actions" style="display:flex; flex-direction:column; align-items:center; gap:8px;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <span style="color:#ef4444; font-size:12px; font-weight:700; width:28px; text-align:right;">OFF</span>
                   <label class="switch" title="Online / Offline">
@@ -2602,7 +2619,7 @@ body.light-mode .system-tools .secondary-btn{
                   </label>
                   <span style="color:#4ade80; font-size:12px; font-weight:700; width:28px; text-align:left;">ON</span>
                 </div>
-                <button class="break-btn ${status === "BREAK" ? "active" : ""}" style="width:100%; max-width:75px; margin:0 auto; padding:6px 8px; font-size:12px;" onclick="toggleBreak('${encodeURIComponent(a.id)}','${sys}')">พักเบรก</button>
+                <button class="break-btn ${status === "BREAK" ? "active" : ""}" style="width:100%; max-width:72px; margin:0 auto; padding:5px 7px; font-size:12px;" onclick="toggleBreak('${encodeURIComponent(a.id)}','${sys}')">พักเบรก</button>
               </div>
               <div class="time-controls">
                 <div class="time-row">
@@ -3050,7 +3067,7 @@ body.light-mode .system-tools .secondary-btn{
             return !query || text.includes(query);
           });
         agentsTarget.innerHTML = agents.length ? agents.map(a=>`
-          <div class="agent-card readonly-agent">
+          <div class="agent-card readonly-agent status-online">
             <div>
               <div class="agent-name"><span class="status-dot online"></span>${escapeHtml(a.name || "-")}</div>
               <div class="small-text">${escapeHtml(a.note || "ไม่มี note")} | วันนี้ ${escapeHtml(a.todayCount || 0)} งาน</div>
